@@ -16,6 +16,7 @@ namespace NCS.DSS.ChangeFeedListener.Model
         public bool IsInteraction { get; set; }
         public bool IsOutcome { get; set; }
         public bool IsSession { get; set; }
+        public bool IsSubscription { get; set; }
         public bool IsTransfer { get; set; }
         public bool IsWebChat { get; set; }
     }
