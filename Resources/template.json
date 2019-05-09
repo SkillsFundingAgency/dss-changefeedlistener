@@ -26,10 +26,10 @@
         "description": "Connection string for the storage account to store function app files"
       }
     },
-    "ServiceBusConnectionString": {
+    "serviceBusConnectionString": {
       "type": "securestring"
     },
-    "CosmosDBConnectionString": {
+    "cosmosDBConnectionString": {
       "type": "securestring"
       }
   },
@@ -198,11 +198,11 @@
               },
               {
                 "name": "ServiceBusConnectionString",
-                "value": "[parameters('ServiceBusConnectionString')]"
+                "value": "[parameters('serviceBusConnectionString')]"
               },
               {
                 "name": "CosmosDBConnectionString",
-                "value": "[parameters('CosmosDBConnectionString')]"
+                "value": "[parameters('cosmosDBConnectionString')]"
               }
             ]
           }
