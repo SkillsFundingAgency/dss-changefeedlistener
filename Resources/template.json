@@ -1,0 +1,227 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "functionAppPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix for the function app resources, in the form dfc-env-proj-fnapp"
+      }
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "App service plan to run the function app under"
+      }
+    },
+    "appServicePlanResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group the app service plan is in"
+      }
+    },
+    "storageConnectionString": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Connection string for the storage account to store function app files"
+      }
+    },
+    "serviceBusConnectionString": {
+      "type": "securestring"
+    },
+    "cosmosDBConnectionString": {
+      "type": "securestring"
+      }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa')]",
+    "appInsightName": "[concat(parameters('functionAppPrefix'),'-ai')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appInsightName')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('appInsightName')]"
+          },
+          "attachedService": {
+            "value": "[variables('functionAppName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[variables('functionAppName')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'app-service.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceName": {
+            "value": "[variables('functionAppName')]"
+          },
+          "appServicePlanName": {
+            "value": "[parameters('appServicePlanName')]"
+          },
+          "appServicePlanResourceGroup": {
+            "value": "[parameters('appServicePlanResourceGroup')]"
+          },
+          "appServiceType": {
+            "value": "functionapp"
+          },
+          "appServiceAppSettings": {
+            "value": [
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference(variables('appInsightName')).outputs.InstrumentationKey.value]"
+              },
+              {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~2"
+              },
+              {
+                "name": "AzureWebJobsStorage",
+                "value": "[parameters('storageConnectionString')]"
+              },
+              {
+                "name": "ContactCollectionId",
+                "value": "contacts"
+              },
+              {
+                "name": "ContactDatabaseId",
+                "value": "contacts"
+              },
+              {
+                "name": "ContactLeaseCollectionName",
+                "value": "contact-lease"
+              },
+              {
+                "name": "ContactLeaseCollectionPrefix",
+                "value": "ContactChangeFeedPrefix"
+              },
+              {
+                "name": "DiversityCollectionId",
+                "value": "diversitydetails"
+              },
+              {
+                "name": "DiversityDatabaseId",
+                "value": "diversitydetails"
+              },
+              {
+                "name": "DiversityLeaseCollectionName",
+                "value": "diversity-lease"
+              },
+              {
+                "name": "DiversityLeaseCollectionPrefix",
+                "value": "DiversityChangeFeedPrefix"
+              },
+              {
+                "name": "InteractionCollectionId",
+                "value": "interactions"
+              },
+              {
+                "name": "InteractionDatabaseId",
+                "value": "interactions"
+              },
+              {
+                "name": "InteractionLeaseCollectionName",
+                "value": "interaction-lease"
+              },
+              {
+                "name": "InteractionLeaseCollectionPrefix",
+                "value": "InteractionChangeFeedPrefix"
+              },
+              {
+                "name": "SubscriptionCollectionId",
+                "value": "subscriptions"
+              },
+              {
+                "name": "SubscriptionDatabaseId",
+                "value": "subscriptions"
+              },
+              {
+                "name": "SubscriptionLeaseCollectionName",
+                "value": "subscription-lease"
+              },
+              {
+                "name": "SubscriptionLeaseCollectionPrefix",
+                "value": "SubscriptionChangeFeedPrefix"
+              },
+              {
+                "name": "TransferCollectionId",
+                "value": "transfers"
+              },
+              {
+                "name": "TransferDatabaseId",
+                "value": "transfers"
+              },
+              {
+                "name": "TransferLeaseCollectionName",
+                "value": "transfer-lease"
+              },
+              {
+                "name": "TransferLeaseCollectionPrefix",
+                "value": "TransferChangeFeedPrefix"
+              },
+              {
+                "name": "WebChatCollectionId",
+                "value": "webchats"
+              },
+              {
+                "name": "WebChatDatabaseId",
+                "value": "webchats"
+              },
+              {
+                "name": "WebChatLeaseCollectionName",
+                "value": "WebChat-lease"
+              },
+              {
+                "name": "WebChatLeaseCollectionPrefix",
+                "value": "WebChatChangeFeedPrefix"
+              },
+              {
+                "name": "ChangeFeedQueueName",
+                "value": "dss.changefeedqueue"
+              },
+              {
+                "name": "ServiceBusConnectionString",
+                "value": "[parameters('serviceBusConnectionString')]"
+              },
+              {
+                "name": "CosmosDBConnectionString",
+                "value": "[parameters('cosmosDBConnectionString')]"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "functionAppName": {
+      "type": "string",
+      "value": "[variables('functionAppName')]"
+    },
+    "appInsightName": {
+      "type": "string",
+      "value": "[variables('appInsightName')]"
+    },
+    "appInsightInstrumentationKey": {
+      "type": "string",
+      "value": "[reference(variables('appInsightName')).outputs.InstrumentationKey.value]"
+    }
+  }
+}
