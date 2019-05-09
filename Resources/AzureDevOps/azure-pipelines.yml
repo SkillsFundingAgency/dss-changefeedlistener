@@ -19,6 +19,13 @@ steps:
    inputs:
      command: 'build'
      projects: '**/NCS.DSS.ChangeFeedListener.csproj'
+     arguments: '-o "$(build.artifactstagingdirectory)\DeploymentPackages\\"'
+ - task: ArchiveFiles@2
+   displayName: 'Archive $(build.artifactstagingdirectory)\DeploymentPackages\'
+   inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)\DeploymentPackages\'
+    includeRootFolder: false
+    archiveFile: '$(build.artifactstagingdirectory)\DeploymentPackages\$(SolutionBaseName).zip'
  - task: CopyFiles@2
    displayName: 'Copy Files to: $(build.artifactstagingdirectory)/Azure'
    inputs:
