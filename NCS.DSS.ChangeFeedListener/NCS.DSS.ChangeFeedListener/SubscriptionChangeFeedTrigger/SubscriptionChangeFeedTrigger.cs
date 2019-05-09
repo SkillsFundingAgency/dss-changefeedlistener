@@ -17,7 +17,7 @@ namespace NCS.DSS.ChangeFeedListener.SubscriptionChangeFeedTrigger
 
         private const string DatabaseName = "%SubscriptionDatabaseId%";
         private const string CollectionName = "%SubscriptionCollectionId%";
-        private const string ConnectionString = "ConnectionString";
+        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%SubscriptionLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%SubscriptionLeaseCollectionPrefix%";
 

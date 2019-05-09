@@ -17,7 +17,7 @@ namespace NCS.DSS.ChangeFeedListener.InteractionChangeFeedTrigger
 
         private const string DatabaseName = "%InteractionDatabaseId%";
         private const string CollectionName = "%InteractionCollectionId%";
-        private const string ConnectionString = "ConnectionString";
+        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%InteractionLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%InteractionLeaseCollectionPrefix%";
 

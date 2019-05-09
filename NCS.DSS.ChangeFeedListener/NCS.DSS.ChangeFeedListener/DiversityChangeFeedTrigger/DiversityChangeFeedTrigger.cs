@@ -17,7 +17,7 @@ namespace NCS.DSS.ChangeFeedListener.DiversityChangeFeedTrigger
 
         private const string DatabaseName = "%DiversityDatabaseId%";
         private const string CollectionName = "%DiversityCollectionId%";
-        private const string ConnectionString = "ConnectionString";
+        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%DiversityLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%DiversityLeaseCollectionPrefix%";
 

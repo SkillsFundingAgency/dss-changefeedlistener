@@ -17,7 +17,7 @@ namespace NCS.DSS.ChangeFeedListener.TransferChangeFeedTrigger
 
         private const string DatabaseName = "%TransferDatabaseId%";
         private const string CollectionName = "%TransferCollectionId%";
-        private const string ConnectionString = "ConnectionString";
+        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%TransferLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%TransferLeaseCollectionPrefix%";
 

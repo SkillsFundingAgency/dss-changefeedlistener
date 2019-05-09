@@ -17,7 +17,7 @@ namespace NCS.DSS.ChangeFeedListener.ContactChangeFeedTrigger
 
         private const string DatabaseName = "%ContactDatabaseId%";
         private const string CollectionName = "%ContactCollectionId%";
-        private const string ConnectionString = "ConnectionString";
+        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%ContactLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%ContactLeaseCollectionPrefix%";
 

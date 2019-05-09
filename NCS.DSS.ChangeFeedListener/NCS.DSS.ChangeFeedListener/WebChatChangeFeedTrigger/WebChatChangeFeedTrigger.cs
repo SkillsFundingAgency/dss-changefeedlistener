@@ -17,7 +17,7 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
 
         private const string DatabaseName = "%WebChatDatabaseId%";
         private const string CollectionName = "%WebChatCollectionId%";
-        private const string ConnectionString = "ConnectionString";
+        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%WebChatLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%WebChatLeaseCollectionPrefix%";
 
