@@ -1,5 +1,5 @@
 variables:
-  SolutionBaseName: 'NCS.DSS.ChangeFeedListener'
+  SolutionBaseName: 'dss-changefeedlistener'
   BuildPlatform: 'any cpu'
   BuildConfiguration: 'release'
 
@@ -18,14 +18,21 @@ steps:
    displayName: 'dotnet build'
    inputs:
      command: 'build'
-     projects: '**/NCS.DSS.ChangeFeedListener.csproj'
-     arguments: '-o "$(build.artifactstagingdirectory)\DeploymentPackages\\"'
- - task: ArchiveFiles@2
-   displayName: 'Archive $(build.artifactstagingdirectory)\DeploymentPackages\'
+ - task: DotNetCoreCLI@2
+   displayName: dotnet test
    inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)\DeploymentPackages\'
-    includeRootFolder: false
-    archiveFile: '$(build.artifactstagingdirectory)\DeploymentPackages\$(SolutionBaseName).zip'
+    command: test
+    projects: '**/*.csproj'
+    configuration: ${{ variables.buildConfiguration }}
+ - task: DotNetCoreCLI@2
+   displayName: dotnet publish
+   inputs:
+    command: publish
+    projects: '**/*.csproj'
+    configuration: ${{ variables.buildConfiguration }}
+    arguments: '--output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+    publishWebProjects: false
  - task: CopyFiles@2
    displayName: 'Copy Files to: $(build.artifactstagingdirectory)/Azure'
    inputs:
