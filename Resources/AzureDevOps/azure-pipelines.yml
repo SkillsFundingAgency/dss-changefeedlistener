@@ -1,4 +1,4 @@
-parameters:
+variables:
   SolutionBaseName: 'NCS.DSS.ChangeFeedListener'
   BuildPlatform: 'any cpu'
   BuildConfiguration: 'release'
