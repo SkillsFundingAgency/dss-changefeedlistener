@@ -104,6 +104,70 @@
                 "value": "[parameters('storageConnectionString')]"
               },
               {
+                "name": "ActionPlanCollectionId",
+                "value": "actionplans"
+              },
+              {
+                "name": "ActionPlanDatabaseId",
+                "value": "actionplans"
+              },
+              {
+                "name": "ActionPlanLeaseCollectionName",
+                "value": "actionplans-lease"
+              },
+              {
+                "name": "ActionPlanLeaseCollectionPrefix",
+                "value": "ActionPlanChangeFeedPrefix"
+              },
+              {
+                "name": "ActionCollectionId",
+                "value": "actions"
+              },
+              {
+                "name": "ActionDatabaseId",
+                "value": "actions"
+              },
+              {
+                "name": "ActionLeaseCollectionName",
+                "value": "actions-lease"
+              },
+              {
+                "name": "ActionLeaseCollectionPrefix",
+                "value": "ActionChangeFeedPrefix"
+              },
+              {
+                "name": "AddressCollectionId",
+                "value": "addresses"
+              },
+              {
+                "name": "AddressDatabaseId",
+                "value": "addresses"
+              },
+              {
+                "name": "AddressLeaseCollectionName",
+                "value": "addresses-lease"
+              },
+              {
+                "name": "AddressLeaseCollectionPrefix",
+                "value": "AddressChangeFeedPrefix"
+              },
+              {
+                "name": "AdviserDetailCollectionId",
+                "value": "adviserdetails"
+              },
+              {
+                "name": "AdviserDetailDatabaseId",
+                "value": "adviserdetails"
+              },
+              {
+                "name": "AdviserDetailLeaseCollectionName",
+                "value": "adviserdetails-lease"
+              },
+              {
+                "name": "AdviserDetailLeaseCollectionPrefix",
+                "value": "AdviserDetailChangeFeedPrefix"
+              },
+              {
                 "name": "ContactCollectionId",
                 "value": "contacts"
               },
@@ -118,6 +182,22 @@
               {
                 "name": "ContactLeaseCollectionPrefix",
                 "value": "ContactChangeFeedPrefix"
+              },
+              {
+                "name": "CustomerCollectionId",
+                "value": "customers"
+              },
+              {
+                "name": "CustomerDatabaseId",
+                "value": "customers"
+              },
+              {
+                "name": "CustomerLeaseCollectionName",
+                "value": "customers-lease"
+              },
+              {
+                "name": "CustomerLeaseCollectionPrefix",
+                "value": "CustomerChangeFeedPrefix"
               },
               {
                 "name": "DiversityCollectionId",
@@ -136,6 +216,22 @@
                 "value": "DiversityChangeFeedPrefix"
               },
               {
+                "name": "GoalCollectionId",
+                "value": "goals"
+              },
+              {
+                "name": "GoalDatabaseId",
+                "value": "goals"
+              },
+              {
+                "name": "GoalLeaseCollectionName",
+                "value": "goals-lease"
+              },
+              {
+                "name": "GoalLeaseCollectionPrefix",
+                "value": "GoalChangeFeedPrefix"
+              },
+              {
                 "name": "InteractionCollectionId",
                 "value": "interactions"
               },
@@ -150,6 +246,38 @@
               {
                 "name": "InteractionLeaseCollectionPrefix",
                 "value": "InteractionChangeFeedPrefix"
+              },
+              {
+                "name": "OutcomeCollectionId",
+                "value": "outcomes"
+              },
+              {
+                "name": "OutcomeDatabaseId",
+                "value": "outcomes"
+              },
+              {
+                "name": "OutcomeLeaseCollectionName",
+                "value": "outcomes-lease"
+              },
+              {
+                "name": "OutcomeLeaseCollectionPrefix",
+                "value": "OutcomesChangeFeedPrefix"
+              },
+              {
+                "name": "SessionCollectionId",
+                "value": "sessions"
+              },
+              {
+                "name": "SessionDatabaseId",
+                "value": "sessions"
+              },
+              {
+                "name": "SessionLeaseCollectionName",
+                "value": "sessions-lease"
+              },
+              {
+                "name": "SessionLeaseCollectionPrefix",
+                "value": "SessionChangeFeedPrefix"
               },
               {
                 "name": "SubscriptionCollectionId",
