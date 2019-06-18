@@ -8,7 +8,6 @@ steps:
    displayName: GitVersion
    inputs:
      preferBundledVersion: false
-     additionalArguments: /showconfig
  - task: NuGetToolInstaller@0
    displayName: 'Use NuGet 4.3.0'
  - task: NuGetCommand@2

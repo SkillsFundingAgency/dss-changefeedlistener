@@ -1,2 +1,8 @@
 mode: ContinuousDelivery
-increment: Patch
+branches:
+  master:
+    regex: master*
+    is-source-branch-for: ['*']
+  CDS:
+    regex: CDS-*
+    increment: Patch
