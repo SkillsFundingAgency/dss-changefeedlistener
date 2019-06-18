@@ -2,6 +2,7 @@ mode: ContinuousDeployment
 branches:
   master-v:
     regex: ^master-(v\d+)$
+    source-branches: [ 'CDS', 'master-v' ]
     mode: ContinuousDeployment
     increment: Patch
   CDS:
