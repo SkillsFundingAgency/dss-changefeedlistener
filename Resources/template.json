@@ -200,6 +200,22 @@
                 "value": "CustomerChangeFeedPrefix"
               },
               {
+                "name": "DataCollectionsCollectionId",
+                "value": "collections"
+              },
+              {
+                "name": "DataCollectionsDatabaseId",
+                "value": "collections"
+              },
+              {
+                "name": "DataCollectionsLeaseCollectionName",
+                "value": "collections-lease"
+              },
+              {
+                "name": "DataCollectionsLeaseCollectionPrefix",
+                "value": "CollectionChangeFeedPrefix"
+              },
+              {
                 "name": "DiversityCollectionId",
                 "value": "diversitydetails"
               },
@@ -214,6 +230,22 @@
               {
                 "name": "DiversityLeaseCollectionPrefix",
                 "value": "DiversityChangeFeedPrefix"
+              },
+              {
+                "name": "EmploymentProgressionCollectionId",
+                "value": "employmentprogressions"
+              },
+              {
+                "name": "EmploymentProgressionDatabaseId",
+                "value": "employmentprogressions"
+              },
+              {
+                "name": "EmploymentProgressionLeaseCollectionName",
+                "value": "employmentprogressions-lease"
+              },
+              {
+                "name": "EmploymentProgressionLeaseCollectionPrefix",
+                "value": "EmploymentProgressionChangeFeedPrefix"
               },
               {
                 "name": "GoalCollectionId",
@@ -246,6 +278,22 @@
               {
                 "name": "InteractionLeaseCollectionPrefix",
                 "value": "InteractionChangeFeedPrefix"
+              },
+              {
+                "name": "LearningProgressionCollectionId",
+                "value": "learningprogressions"
+              },
+              {
+                "name": "LearningProgressionDatabaseId",
+                "value": "learningprogressions"
+              },
+              {
+                "name": "LearningProgressionLeaseCollectionName",
+                "value": "learningprogressions-lease"
+              },
+              {
+                "name": "LearningProgressionLeaseCollectionPrefix",
+                "value": "LearningProgressionChangeFeedPrefix"
               },
               {
                 "name": "OutcomeCollectionId",
