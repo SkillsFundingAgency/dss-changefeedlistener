@@ -20,6 +20,12 @@
         "description": "Resource group the app service plan is in"
       }
     },
+    "searchServiceName": {
+      "type": "string"
+    },
+    "searchServiceAdminApiKey": {
+      "type": "securestring"
+    },
     "storageConnectionString": {
       "type": "securestring",
       "metadata": {
@@ -31,7 +37,7 @@
     },
     "cosmosDBConnectionString": {
       "type": "securestring"
-      }
+    }
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
@@ -386,6 +392,22 @@
               {
                 "name": "CosmosDBConnectionString",
                 "value": "[parameters('cosmosDBConnectionString')]"
+              },
+              {
+                "name": "CustomerSearchIndexName",
+                "value": "customer-search-index"
+              },
+              {
+                "name": "CustomerSearchIndexNameV2",
+                "value": "customer-search-index-v2"
+              },
+              {
+                "name": "SearchServiceName",
+                "value": "[parameters('searchServiceName')]"
+              },
+              {
+                "name": "SearchServiceAdminApiKey",
+                "value": "[parameters('searchServiceAdminApiKey')]"
               }
             ]
           }
