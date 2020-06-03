@@ -408,6 +408,22 @@
               {
                 "name": "SearchServiceAdminApiKey",
                 "value": "[parameters('searchServiceAdminApiKey')]"
+              },
+              {
+                "name": "DigitalIdentityDatabaseId",
+                "value": "digitalidentities"
+              },
+              {
+                "name": "DigitalIdentityCollectionId",
+                "value": "digitalidentities"
+              },
+              {
+                "name": "DigitalIdentityLeaseCollectionName",
+                "value": "digitalidentities-lease"
+              },
+              {
+                "name": "DigitalIdentityLeaseCollectionPrefix",
+                "value": "digitalidentitiesChangeFeedPrefix"
               }
             ]
           }
