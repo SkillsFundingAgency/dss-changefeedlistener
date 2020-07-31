@@ -3,13 +3,19 @@ variables:
   BuildPlatform: 'any cpu'
   BuildConfiguration: 'release'
 
+pool:
+  name: NCS - CI and CD
+  demands:
+    - msbuild
+    - visualstudio
+
 jobs:
 - job:
-  displayName: uild-DotNetStandard
+  displayName: Build-DotNetStandard
   workspace:
     clean: all
   steps:
-   - task: gittools.gitversion.gitversion-task.GitVersion@4
+   - task: gittools.gitversion.gitversion-task.GitVersion@5
      displayName: GitVersion
      inputs:
        preferBundledVersion: false
