@@ -8,11 +8,13 @@ pool:
   demands:
     - msbuild
     - visualstudio
+
 jobs:
 - job:
   displayName: Build-DotNetStandard
   workspace:
     clean: all
+
   steps:
    - task: gittools.gitversion.gitversion-task.GitVersion@4
      displayName: GitVersion
