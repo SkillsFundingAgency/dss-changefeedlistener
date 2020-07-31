@@ -15,7 +15,7 @@ jobs:
   workspace:
     clean: all
   steps:
-   - task: gittools.gitversion.gitversion-task.GitVersion@4
+   - task: gittools.gitversion.gitversion-task.GitVersion@5
      displayName: GitVersion
      inputs:
        preferBundledVersion: false
