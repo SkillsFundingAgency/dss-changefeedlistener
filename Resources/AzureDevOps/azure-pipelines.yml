@@ -15,10 +15,10 @@ jobs:
   workspace:
     clean: all
   steps:
-   - task: gittools.gitversion.gitversion-task.GitVersion@5
+   - task: GitVersion@5
      displayName: GitVersion
      inputs:
-       preferBundledVersion: false
+       preferBundledVersion: true
    - task: NuGetToolInstaller@0
      displayName: 'Use NuGet 4.3.0'
    - task: NuGetCommand@2
