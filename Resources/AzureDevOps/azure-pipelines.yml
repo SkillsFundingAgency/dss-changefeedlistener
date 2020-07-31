@@ -3,9 +3,14 @@ variables:
   BuildPlatform: 'any cpu'
   BuildConfiguration: 'release'
 
+pool:
+  name: NCS - CI and CD
+  demands:
+    - msbuild
+    - visualstudio
 jobs:
 - job:
-  displayName: uild-DotNetStandard
+  displayName: Build-DotNetStandard
   workspace:
     clean: all
   steps:
