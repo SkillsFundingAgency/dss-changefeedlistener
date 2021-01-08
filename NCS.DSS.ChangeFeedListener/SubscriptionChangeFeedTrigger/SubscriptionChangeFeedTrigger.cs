@@ -35,10 +35,10 @@ namespace NCS.DSS.ChangeFeedListener.SubscriptionChangeFeedTrigger
             LeaseCollectionName = LeaseCollectionName,
             LeaseCollectionPrefix = LeaseCollectionPrefix,
             CreateLeaseCollectionIfNotExists = true
-            )] IReadOnlyList<Document> documents, 
+            )] IReadOnlyList<Document> documents,
             ILogger log)
         {
-           
+
             try
             {
                 foreach (var document in documents)

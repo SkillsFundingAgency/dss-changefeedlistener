@@ -35,7 +35,7 @@ namespace NCS.DSS.ChangeFeedListener.CustomerChangeFeedTrigger
             LeaseCollectionName = LeaseCollectionName,
             LeaseCollectionPrefix = LeaseCollectionPrefix,
             CreateLeaseCollectionIfNotExists = true
-            )] IReadOnlyList<Document> documents, 
+            )] IReadOnlyList<Document> documents,
             ILogger log)
         {
             try
