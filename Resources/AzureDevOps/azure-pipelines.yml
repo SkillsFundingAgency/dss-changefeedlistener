@@ -1,51 +1,73 @@
 variables:
-  SolutionBaseName: 'NCS.DSS.ChangeFeedListener'
-  BuildPlatform: 'any cpu'
-  BuildConfiguration: 'release'
+    SolutionBaseName: 'NCS.DSS.ChangeFeedListener'
+    BuildPlatform: 'any cpu'
+    BuildConfiguration: 'release'
+
+resources:
+  repositories:
+  - repository: self
+  - repository: dfc-devops
+    type: github
+    name: SkillsFundingAgency/dfc-devops
+    ref: refs/tags/v1.11.2
+    endpoint: 'GitHub (CDH)'
 
 pool:
   name: NCS - CI and CD
   demands:
     - msbuild
     - visualstudio
-
 jobs:
-- job:
-  displayName: Build-DotNetStandard
-  workspace:
-    clean: all
+# Test the branch name, the output of this job will satisfy the condition of one or neither of the subsequent jobs
+- job: TestBranchName
+  displayName: TestBranchName
+
+  variables:
+    TestBranchNameScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dss-devops/master/Scripts/Test-BranchName.ps1
+    TestBranchNameScriptFilePath: $(System.DefaultWorkingDirectory)\Test-BranchName.ps1
+
   steps:
-   - task: gittools.gitversion.gitversion-task.GitVersion@5
-     displayName: GitVersion
-     inputs:
-       preferBundledVersion: false
-   - task: NuGetToolInstaller@0
-     displayName: 'Use NuGet 4.3.0'
-   - task: NuGetCommand@2
-     displayName: 'NuGet restore ${{ variables.SolutionBaseName }}.sln'
-     inputs:
-       restoreSolution: '${{ variables.SolutionBaseName }}.sln'
-   - task: DotNetCoreCLI@2
-     displayName: 'dotnet build'
-     inputs:
-       command: 'build'
-       projects: '**/NCS.DSS.ChangeFeedListener.csproj'
-       arguments: '-o "$(build.artifactstagingdirectory)\DeploymentPackages\\"'
-   - task: ArchiveFiles@2
-     displayName: 'Archive $(build.artifactstagingdirectory)\DeploymentPackages\'
-     inputs:
-      rootFolderOrFile: '$(build.artifactstagingdirectory)\DeploymentPackages\'
-      includeRootFolder: false
-      archiveFile: '$(build.artifactstagingdirectory)\DeploymentPackages\$(SolutionBaseName).zip'
-   - task: CopyFiles@2
-     displayName: 'Copy Files to: $(build.artifactstagingdirectory)/Azure'
-     inputs:
-       sourceFolder: 'Resources'
-       contents: '**'
-       targetFolder: '$(build.artifactstagingdirectory)/Azure'
-   - task: PublishBuildArtifacts@1
-     displayName: 'Publish Artifact: ${{ variables.SolutionBaseName }}'
-     inputs:
-       pathtoPublish: $(build.artifactstagingdirectory)
-       artifactName: ${{ variables.SolutionBaseName }}
-       publishLocation: container
+  - task: PowerShell@2
+    name: DownloadTestBranchNameScript
+    displayName: 'Download Test-BranchName script'
+    inputs:
+     targetType: 'inline'
+     script: Invoke-WebRequest -Uri $(TestBranchNameScriptUrl) -OutFile $(TestBranchNameScriptFilePath)
+  - task: PowerShell@2
+    name: ExecuteTestBranchNameScript
+    displayName: Test-BranchName
+    inputs:
+     targetType: 'filePath'
+     filePath: $(TestBranchNameScriptFilePath)
+     arguments: '-BranchName $(Build.SourceBranchName) -PullRequestBranchName $(if ("$(Build.SourceBranchName)" -eq "merge") { "$(System.PullRequest.SourceBranch)" } else { "NotAPullRequest" } ) -PipelineType Build -Verbose'
+
+# Build the app with the dfc-dotnetframework-build template.  Runs if the output of TestBranchName is Version1
+- job: BuildDotNetFramework
+  displayName: Build-DotNetFramework
+  dependsOn: TestBranchName
+  condition: and(succeeded(), eq(dependencies.TestBranchName.outputs['ExecuteTestBranchNameScript.FunctionAppVersion'], 'Version1'))
+
+  steps:
+  - template: AzureDevOpsTemplates\Build\StepTemplates\dss-dotnetframework-build.yml@dfc-devops
+    parameters:
+      SolutionBaseName: $(SolutionBaseName)
+      BuildPlatform: $(BuildPlatform)
+      BuildConfiguration: $(BuildConfiguration)
+
+# Build the app with the dfc-dotnetcore-build template.  Runs if the output of TestBranchName is Version2+
+- job: BuildDotNetStandard
+  displayName: Build-DotNetStandard
+  dependsOn: TestBranchName
+  condition: and(succeeded(), eq(dependencies.TestBranchName.outputs['ExecuteTestBranchNameScript.FunctionAppVersion'], 'Version2+'))
+
+  steps:
+  - template: AzureDevOpsTemplates\Build\StepTemplates\dfc-dotnetcorefunctionapp-build-notests.yml@dfc-devops
+    parameters:
+      SolutionBaseName: $(SolutionBaseName)
+      BuildPlatform: $(BuildPlatform)
+      BuildConfiguration: $(BuildConfiguration)
+
+
+
+
+
