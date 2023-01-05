@@ -12,6 +12,7 @@ namespace NCS.DSS.Customer.Helpers
         private static readonly string SearchServiceIndexNameV2 = Environment.GetEnvironmentVariable("CustomerSearchIndexNameV2");
 
         private static SearchClient _client;
+        private static SearchClient _client2;
 
 
         public static SearchClient GetSearchServiceClient()
@@ -26,12 +27,12 @@ namespace NCS.DSS.Customer.Helpers
 
         public static SearchClient GetSearchServiceClientV2()
         {
-            if (_client != null)
-                return _client;
+            if (_client2 != null)
+                return _client2;
 
-            _client = new SearchClient(new Uri($"https://{SearchServiceName}.search.windows.net"), SearchServiceIndexNameV2, new AzureKeyCredential(SearchServiceKey));
+            _client2 = new SearchClient(new Uri($"https://{SearchServiceName}.search.windows.net"), SearchServiceIndexNameV2, new AzureKeyCredential(SearchServiceKey));
 
-            return _client;
+            return _client2;
         }
 
     }
