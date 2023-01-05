@@ -1,19 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AzureFunctionsVersion>v3</AzureFunctionsVersion>
-    <RuntimeFrameworkVersion>3.1</RuntimeFrameworkVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.11.1" />
+    <PackageReference Include="Azure.Search.Documents" Version="11.4.0" />
     <PackageReference Include="DFC.Common.Standard" Version="0.1.4" />
-    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.11.6" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.2" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Azure.Search" Version="10.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.9" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.3" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="3.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.3" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.8.1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -31,10 +31,10 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
         public async Task Run([CosmosDBTrigger(
             DatabaseName,
             CollectionName,
-            ConnectionStringSetting = ConnectionString,
-            LeaseCollectionName = LeaseCollectionName,
-            LeaseCollectionPrefix = LeaseCollectionPrefix,
-            CreateLeaseCollectionIfNotExists = true
+            Connection = ConnectionString,
+            LeaseContainerName = LeaseCollectionName,
+            LeaseContainerPrefix = LeaseCollectionPrefix,
+            CreateLeaseContainerIfNotExists  = true
             )] IReadOnlyList<Document> documents,
             ILogger log)
         {

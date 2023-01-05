@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure;
 using DFC.Common.Standard.Logging;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.Search;
-using Microsoft.Azure.Search.Models;
+using Azure.Search;
+using Azure.Search.Documents.Models;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
 using Document = Microsoft.Azure.Documents.Document;
@@ -33,10 +34,10 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
         public async Task Run([CosmosDBTrigger(
             DatabaseName,
             CollectionName,
-            ConnectionStringSetting = ConnectionString,
-            LeaseCollectionName = LeaseCollectionName,
-            LeaseCollectionPrefix = LeaseCollectionPrefix,
-            CreateLeaseCollectionIfNotExists = true
+            Connection = ConnectionString,
+            LeaseContainerName = LeaseCollectionName,
+            LeaseContainerPrefix = LeaseCollectionPrefix,
+            CreateLeaseContainerIfNotExists  = true
             )] IReadOnlyList<Document> documents,
             ILogger log)
         {
@@ -46,8 +47,8 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 
             log.LogInformation("Getting search service client");
 
-            var indexClient = SearchHelper.GetIndexClient();
-            var indexClientV2 = SearchHelper.GetIndexClientV2();
+            var indexClient = SearchHelper.GetSearchServiceClient(); ;
+            var indexClientV2 = SearchHelper.GetSearchServiceClientV2();
 
             log.LogInformation("Retrieved index client");
 
@@ -91,40 +92,35 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                     LastModifiedTouchpointId = doc.GetPropertyValue<string>("LastModifiedTouchpointId")
                 }).ToList();
 
-                var batch = IndexBatch.MergeOrUpload(customers);
-                var batchV2 = IndexBatch.MergeOrUpload(customersV2);
+                var batch = IndexDocumentsBatch.MergeOrUpload(customers);
+                var batchV2 = IndexDocumentsBatch.MergeOrUpload(customersV2);
 
                 try
                 {
                     log.LogInformation("attempting to merge docs to azure search");
 
-                    await indexClient.Documents.IndexAsync(batch);
+                    await indexClient.IndexDocumentsAsync(batch);
 
                     log.LogInformation("successfully merged docs to azure search");
 
                 }
-                catch (IndexBatchException e)
+                catch (RequestFailedException e)
                 {
-                    log.LogError(string.Format("Failed to index some of the documents: {0}",
-                        string.Join(", ", e.IndexingResults.Where(r => !r.Succeeded).Select(r => r.Key))));
 
-                    log.LogError(e.ToString());
+                    log.LogError("Failed to update search", e);
                 }
                 try
                 {
                     log.LogInformation("attempting to merge docs to azure search V2");
                     //V2
-                    await indexClientV2.Documents.IndexAsync(batchV2);
+                    await indexClientV2.IndexDocumentsAsync(batchV2);
 
                     log.LogInformation("successfully merged docs to azure search V2");
 
                 }
-                catch (IndexBatchException e)
+                catch (RequestFailedException e)
                 {
-                    log.LogError(string.Format("Failed to index some of the documents in V2: {0}",
-                        string.Join(", ", e.IndexingResults.Where(r => !r.Succeeded).Select(r => r.Key))));
-
-                    log.LogError(e.ToString());
+                    log.LogError("Failed to update search", e);
                 }
             }
         }
