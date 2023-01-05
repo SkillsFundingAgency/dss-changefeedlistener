@@ -7,6 +7,7 @@ using DFC.Common.Standard.Logging;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
 using Azure.Search;
+using Azure.Search.Documents;
 using Azure.Search.Documents.Models;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
@@ -91,13 +92,10 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                     LastModifiedTouchpointId = doc.GetPropertyValue<string>("LastModifiedTouchpointId")
                 }).ToList();
 
-                var batch = IndexDocumentsBatch.MergeOrUpload(customers);
-                var batchV2 = IndexDocumentsBatch.MergeOrUpload(customersV2);
-
                 try
                 {
                     log.LogInformation("attempting to merge docs to azure search");
-
+                    var batch = IndexDocumentsBatch.MergeOrUpload(customers);
                     await indexClient.IndexDocumentsAsync(batch);
 
                     log.LogInformation("successfully merged docs to azure search");
@@ -112,7 +110,8 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                 {
                     log.LogInformation("attempting to merge docs to azure search V2");
                     //V2
-                    await indexClientV2.IndexDocumentsAsync(batchV2);
+                    var batch = IndexDocumentsBatch.MergeOrUpload(customersV2);
+                    await indexClientV2.IndexDocumentsAsync(batch);
 
                     log.LogInformation("successfully merged docs to azure search V2");
 
