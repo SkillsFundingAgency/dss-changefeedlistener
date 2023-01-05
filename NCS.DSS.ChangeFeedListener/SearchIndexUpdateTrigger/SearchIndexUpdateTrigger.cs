@@ -43,8 +43,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
         {
             log.LogInformation("SearchIndexUpdateTrigger fired.");
 
-            SearchHelper.GetSearchServiceClient();
-
+            
             log.LogInformation("Getting search service client");
 
             var indexClient = SearchHelper.GetSearchServiceClient(); ;
@@ -56,7 +55,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
             {
                 var customers = documents.Select(doc => new Model.Customer()
                 {
-                    CustomerId = doc.GetPropertyValue<Guid?>("id"),
+                    Id = doc.GetPropertyValue<Guid?>("id"),
                     DateOfRegistration = doc.GetPropertyValue<DateTime?>("DateOfRegistration"),
                     GivenName = doc.GetPropertyValue<string>("GivenName"),
                     FamilyName = doc.GetPropertyValue<string>("FamilyName"),
