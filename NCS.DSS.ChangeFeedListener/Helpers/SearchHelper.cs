@@ -1,5 +1,6 @@
 ﻿using System;
-using Microsoft.Azure.Search;
+using Azure;
+using Azure.Search.Documents;
 
 namespace NCS.DSS.Customer.Helpers
 {
@@ -10,37 +11,28 @@ namespace NCS.DSS.Customer.Helpers
         private static readonly string SearchServiceIndexName = Environment.GetEnvironmentVariable("CustomerSearchIndexName");
         private static readonly string SearchServiceIndexNameV2 = Environment.GetEnvironmentVariable("CustomerSearchIndexNameV2");
 
-        private static SearchServiceClient _serviceClient;
-        private static ISearchIndexClient _indexClient;
-        private static ISearchIndexClient _indexClientV2;
+        private static SearchClient _client;
+        private static SearchClient _client2;
 
-        public static SearchServiceClient GetSearchServiceClient()
+
+        public static SearchClient GetSearchServiceClient()
         {
-            if (_serviceClient != null)
-                return _serviceClient;
+            if (_client != null)
+                return _client;
 
-            _serviceClient = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
+            _client = new SearchClient(new Uri($"https://{SearchServiceName}.search.windows.net"), SearchServiceIndexName, new AzureKeyCredential(SearchServiceKey));
 
-            return _serviceClient;
+            return _client;
         }
 
-        public static ISearchIndexClient GetIndexClient()
+        public static SearchClient GetSearchServiceClientV2()
         {
-            if (_indexClient != null)
-                return _indexClient;
+            if (_client2 != null)
+                return _client2;
 
-            _indexClient = _serviceClient?.Indexes?.GetClient(SearchServiceIndexName);
+            _client2 = new SearchClient(new Uri($"https://{SearchServiceName}.search.windows.net"), SearchServiceIndexNameV2, new AzureKeyCredential(SearchServiceKey));
 
-            return _indexClient;
-        }
-
-        public static ISearchIndexClient GetIndexClientV2()
-        {
-            if (_indexClientV2 != null)
-                return _indexClientV2;
-
-            _indexClientV2 = _serviceClient?.Indexes?.GetClient(SearchServiceIndexNameV2);
-            return _indexClientV2;
+            return _client2;
         }
 
     }
