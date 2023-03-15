@@ -8,8 +8,7 @@ namespace NCS.DSS.ChangeFeedListener.Model
     public class Customer : ICustomer
     {
         [Display(Description = "Unique identifier of a customer")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "id")]
-        public Guid? CustomerId { get; set; }
+        public Guid? Id { get; set; }
 
         [Display(Description = "Date and time the customer was first recognised by the National Careers Service")]
         public DateTime? DateOfRegistration { get; set; }
