@@ -2,6 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "appInsightsName":{
+      "type": "string"
+    },
+    "appInsightsInstrumentationKey":{
+      "type": "string"
+    },
     "functionAppPrefix": {
       "type": "string",
       "metadata": {
@@ -42,29 +48,29 @@
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa')]",
-    "appInsightName": "[concat(parameters('functionAppPrefix'),'-ai')]"
+    "FunctionAppInsightInstrumentationKey":"[parameters('appInsightsInstrumentationKey')]"
   },
   "resources": [
-    {
-      "apiVersion": "2017-05-10",
-      "name": "[variables('appInsightName')]",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "appInsightsName": {
-            "value": "[variables('appInsightName')]"
-          },
-          "attachedService": {
-            "value": "[variables('functionAppName')]"
-          }
-        }
-      }
-    },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "[variables('appInsightName')]",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "appInsightsName": {
+    //         "value": "[variables('appInsightName')]"
+    //       },
+    //       "attachedService": {
+    //         "value": "[variables('functionAppName')]"
+    //       }
+    //     }
+    //   }
+    // },
     {
       "apiVersion": "2017-05-10",
       "name": "[variables('functionAppName')]",
@@ -95,7 +101,7 @@
             "value": [
               {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                "value": "[reference(variables('appInsightName')).outputs.InstrumentationKey.value]"
+                "value": "[variables('FunctionAppInsightInstrumentationKey')]"
               },
               {
                 "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -438,11 +444,11 @@
     },
     "appInsightName": {
       "type": "string",
-      "value": "[variables('appInsightName')]"
+      "value": "[parameters('appInsightsName')]"
     },
     "appInsightInstrumentationKey": {
       "type": "string",
-      "value": "[reference(variables('appInsightName')).outputs.InstrumentationKey.value]"
+      "value": "[variables('FunctionAppInsightInstrumentationKey')]"
     }
   }
 }
