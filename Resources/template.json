@@ -2,9 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appInsightsName":{
-      "type": "string"
-    },
+ //   "appInsightsName":{
+ //     "type": "string"
+ //   },
     "appInsightsInstrumentationKey":{
       "type": "string"
     },
@@ -442,10 +442,10 @@
       "type": "string",
       "value": "[variables('functionAppName')]"
     },
-    "appInsightName": {
-      "type": "string",
-      "value": "[parameters('appInsightsName')]"
-    },
+//    "appInsightName": {
+//      "type": "string",
+//      "value": "[parameters('appInsightsName')]"
+//    },
     "appInsightInstrumentationKey": {
       "type": "string",
       "value": "[variables('FunctionAppInsightInstrumentationKey')]"

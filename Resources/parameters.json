@@ -16,9 +16,6 @@
     },
     "appInsightsInstrumentationKey": {
       "value": "__appInsightsInstrumentationKey__" 
-    },
-    "appInsightsName":{
-      "value": "__appInsightsName__"
     }
   }
 }
