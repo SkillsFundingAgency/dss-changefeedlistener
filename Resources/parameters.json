@@ -5,6 +5,9 @@
     "functionAppPrefix": {
       "value": "dss-foo-chgfeed"
     },
+    "functionAppSuffix": {
+      "value": "-verNum"
+    },
     "appServicePlanName": {
       "value": "dss-foo-shared-asp"
     },
