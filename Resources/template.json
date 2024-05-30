@@ -8,6 +8,12 @@
         "description": "Prefix for the function app resources, in the form dfc-env-proj-fnapp"
       }
     },
+    "functionAppSuffix": {
+      "type": "string",
+      "metadata": {
+        "description": "Suffix for the function app resources, in the form version number"
+      }
+    },
     "appServicePlanName": {
       "type": "string",
       "metadata": {
@@ -48,7 +54,7 @@
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
-    "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa')]",
+    "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa', parameters('functionAppSuffix'))]",
     "appInsightName": "[concat(parameters('functionAppPrefix'),'-ai')]"
   },
   "resources": [
