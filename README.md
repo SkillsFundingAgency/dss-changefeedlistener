@@ -1,9 +1,11 @@
-# dss-changefeedlistener
+# DSS Change Feed Listener
+
+> [!NOTE]  
+> The latest version of this API is `v2`
 
 [![Build Status](https://sfa-gov-uk.visualstudio.com/CDS%202.0/_apis/build/status/Yaml/dss-changefeedlistener?repoName=SkillsFundingAgency%2Fdss-changefeedlistener&branchName=master-v2)](https://sfa-gov-uk.visualstudio.com/CDS%202.0/_build/latest?definitionId=1564&repoName=SkillsFundingAgency%2Fdss-changefeedlistener&branchName=master-v2)
 
-
-Function app to provide api for processing changes from cosmos triggers to be pushed to sql server.
+Function App to provide an API for processing changes to databases (CosmosDB trigger to sync data across to SQL Server DB).
 
 ## Developer Setup
 
