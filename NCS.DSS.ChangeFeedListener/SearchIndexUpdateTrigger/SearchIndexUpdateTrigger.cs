@@ -4,21 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azure;
 using DFC.Common.Standard.Logging;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.WebJobs;
-using Azure.Search;
-using Azure.Search.Documents;
 using Azure.Search.Documents.Models;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
 using Document = Microsoft.Azure.Documents.Document;
 using NCS.DSS.Customer.ReferenceData;
+using Microsoft.Azure.Functions.Worker;
 
 namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 {
     public class SearchIndexUpdateTrigger
-    {
-        private readonly ILoggerHelper _loggerHelper;
+    {        
+        private readonly ILogger _logger;
 
         private const string DatabaseName = "%CustomerDatabaseId%";
         private const string CollectionName = "%CustomerCollectionId%";
@@ -26,12 +23,12 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
         private const string LeaseCollectionName = "%CustomerLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "Search";
 
-        public SearchIndexUpdateTrigger(ILoggerHelper loggerHelper)
+        public SearchIndexUpdateTrigger(ILogger logger)
         {
-            _loggerHelper = loggerHelper;
+            _logger = logger;
         }
 
-        [FunctionName("SearchIndexUpdateTrigger")]
+        [Function("SearchIndexUpdateTrigger")]
         public async Task Run([CosmosDBTrigger(
             DatabaseName,
             CollectionName,
@@ -39,18 +36,17 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents,
-            ILogger log)
+            )] IReadOnlyList<Document> documents)
         {
-            log.LogInformation("SearchIndexUpdateTrigger fired.");
+            _logger.LogInformation("SearchIndexUpdateTrigger fired.");
 
-            
-            log.LogInformation("Getting search service client");
+
+            _logger.LogInformation("Getting search service client");
 
             var indexClient = SearchHelper.GetSearchServiceClient(); ;
             var indexClientV2 = SearchHelper.GetSearchServiceClientV2();
 
-            log.LogInformation("Retrieved index client");
+            _logger.LogInformation("Retrieved index client");
 
             if (documents != null && documents.Count > 0)
             {
@@ -94,31 +90,31 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 
                 try
                 {
-                    log.LogInformation("attempting to merge docs to azure search");
+                    _logger.LogInformation("attempting to merge docs to azure search");
                     var batch = IndexDocumentsBatch.MergeOrUpload(customers);
                     await indexClient.IndexDocumentsAsync(batch);
 
-                    log.LogInformation("successfully merged docs to azure search");
+                    _logger.LogInformation("successfully merged docs to azure search");
 
                 }
                 catch (RequestFailedException e)
                 {
 
-                    log.LogError("Failed to update search", e);
+                    _logger.LogError("Failed to update search", e);
                 }
                 try
                 {
-                    log.LogInformation("attempting to merge docs to azure search V2");
+                    _logger.LogInformation("attempting to merge docs to azure search V2");
                     //V2
                     var batch = IndexDocumentsBatch.MergeOrUpload(customersV2);
                     await indexClientV2.IndexDocumentsAsync(batch);
 
-                    log.LogInformation("successfully merged docs to azure search V2");
+                    _logger.LogInformation("successfully merged docs to azure search V2");
 
                 }
                 catch (RequestFailedException e)
                 {
-                    log.LogError("Failed to update search", e);
+                    _logger.LogError("Failed to update search", e);
                 }
             }
         }
