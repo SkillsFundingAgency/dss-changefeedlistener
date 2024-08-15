@@ -19,7 +19,9 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
         private const string LeaseCollectionName = "%AddressLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%AddressLeaseCollectionPrefix%";
 
-        public AddressChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper, ILogger logger)
+        public AddressChangeFeedTrigger(IServiceBusClient serviceBusClient, 
+            ILoggerHelper loggerHelper, 
+            ILogger<AddressChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;
