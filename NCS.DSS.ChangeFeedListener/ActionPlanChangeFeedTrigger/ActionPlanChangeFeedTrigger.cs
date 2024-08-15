@@ -19,7 +19,9 @@ namespace NCS.DSS.ChangeFeedListener.ActionPlanChangeFeedTrigger
         private const string LeaseCollectionName = "%ActionPlanLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%ActionPlanLeaseCollectionPrefix%";
 
-        public ActionPlanChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper, ILogger logger)
+        public ActionPlanChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper, 
+            ILogger<ActionPlanChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;

@@ -18,7 +18,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
         private const string LeaseCollectionName = "%CustomerLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "Search";
 
-        public SearchIndexUpdateTrigger(ILogger logger)
+        public SearchIndexUpdateTrigger(ILogger<SearchIndexUpdateTrigger> logger)
         {
             _logger = logger;
         }

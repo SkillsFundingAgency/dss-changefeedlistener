@@ -19,7 +19,9 @@ namespace NCS.DSS.ChangeFeedListener.AdviserDetailChangeFeedTrigger
         private const string LeaseCollectionName = "%AdviserDetailLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%AdviserDetailLeaseCollectionPrefix%";
 
-        public AdviserDetailChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper, ILogger logger)
+        public AdviserDetailChangeFeedTrigger(IServiceBusClient serviceBusClient, 
+            ILoggerHelper loggerHelper, 
+            ILogger<AdviserDetailChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;

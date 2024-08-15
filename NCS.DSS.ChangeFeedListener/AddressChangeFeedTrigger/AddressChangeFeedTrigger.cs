@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
+using Newtonsoft.Json;
 
 namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
 {
@@ -47,6 +48,14 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
                         Document = document,
                         IsAddress = true
                     };
+                    
+                    var coorelationId = Guid.NewGuid();
+
+                    var messageModel = JsonConvert.SerializeObject(changeFeedMessageModel);
+                    _loggerHelper.LogInformationMessage(_logger, coorelationId, $"Message Mode: {messageModel}");
+
+                    var documentModel = JsonConvert.SerializeObject(document);
+                    _loggerHelper.LogInformationMessage(_logger, coorelationId, $"Message Mode: {documentModel}");
 
                     _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
                     await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);

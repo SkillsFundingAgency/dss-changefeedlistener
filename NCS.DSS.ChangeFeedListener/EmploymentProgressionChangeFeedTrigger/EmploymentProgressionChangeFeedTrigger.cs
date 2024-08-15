@@ -19,7 +19,9 @@ namespace NCS.DSS.ChangeFeedListener.EmploymentProgressionChangeFeedTrigger
         private const string LeaseCollectionName = "%EmploymentProgressionLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%EmploymentProgressionLeaseCollectionPrefix%";
 
-        public EmploymentProgressionChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper, ILogger logger)
+        public EmploymentProgressionChangeFeedTrigger(IServiceBusClient serviceBusClient, 
+            ILoggerHelper loggerHelper, 
+            ILogger<EmploymentProgressionChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;

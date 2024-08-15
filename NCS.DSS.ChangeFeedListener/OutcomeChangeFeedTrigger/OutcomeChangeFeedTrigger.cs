@@ -19,7 +19,9 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
         private const string LeaseCollectionName = "%OutcomeLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%OutcomeLeaseCollectionPrefix%";
 
-        public OutcomeChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper, ILogger logger)
+        public OutcomeChangeFeedTrigger(IServiceBusClient serviceBusClient, 
+            ILoggerHelper loggerHelper, 
+            ILogger<OutcomeChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;

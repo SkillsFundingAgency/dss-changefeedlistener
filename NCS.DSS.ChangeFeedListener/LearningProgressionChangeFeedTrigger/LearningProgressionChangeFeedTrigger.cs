@@ -19,7 +19,9 @@ namespace NCS.DSS.ChangeFeedListener.LearningProgressionChangeFeedTrigger
         private const string LeaseCollectionName = "%LearningProgressionLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%LearningProgressionLeaseCollectionPrefix%";
 
-        public LearningProgressionChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper, ILogger logger)
+        public LearningProgressionChangeFeedTrigger(IServiceBusClient serviceBusClient, 
+            ILoggerHelper loggerHelper, 
+            ILogger<LearningProgressionChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;
