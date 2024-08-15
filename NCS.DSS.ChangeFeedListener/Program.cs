@@ -9,6 +9,7 @@ var host = new HostBuilder()
     {
         services.AddSingleton<IServiceBusClient, ServiceBusClient>();
         services.AddSingleton<ILoggerHelper, LoggerHelper>();
+        services.AddLogging();
     })
     .Build();
 
