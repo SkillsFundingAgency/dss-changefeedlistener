@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Azure;
-using DFC.Common.Standard.Logging;
 using Azure.Search.Documents.Models;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
-using Document = Microsoft.Azure.Documents.Document;
 using NCS.DSS.Customer.ReferenceData;
-using Microsoft.Azure.Functions.Worker;
+using Document = Microsoft.Azure.Documents.Document;
 
 namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 {
     public class SearchIndexUpdateTrigger
-    {        
+    {
         private readonly ILogger _logger;
 
         private const string DatabaseName = "%CustomerDatabaseId%";

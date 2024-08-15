@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using DFC.Common.Standard.Logging;
 using Microsoft.Azure.Documents;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
-using Microsoft.Azure.Functions.Worker;
 
 namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using Azure;
+﻿using Azure;
 using Azure.Search.Documents;
 
 namespace NCS.DSS.Customer.Helpers
