@@ -4,8 +4,6 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
-using Newtonsoft.Json;
-using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
 {
@@ -21,8 +19,8 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
         private const string LeaseCollectionName = "%AddressLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%AddressLeaseCollectionPrefix%";
 
-        public AddressChangeFeedTrigger(IServiceBusClient serviceBusClient, 
-            ILoggerHelper loggerHelper, 
+        public AddressChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
             ILogger<AddressChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
@@ -38,14 +36,12 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )]  Object documents)
+            )]  IReadOnlyList<Document> documents)
         {
+
             try
             {
-
-                var cosmosDbDocuments = JsonConvert.DeserializeObject<IReadOnlyList<Document>>(documents.ToString());                
-
-                foreach (var document in cosmosDbDocuments)
+                foreach (var document in documents)
                 {
                     var changeFeedMessageModel = new ChangeFeedMessageModel()
                     {
