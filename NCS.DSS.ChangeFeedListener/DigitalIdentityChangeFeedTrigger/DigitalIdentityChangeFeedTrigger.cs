@@ -19,8 +19,8 @@ namespace NCS.DSS.ChangeFeedListener.DigitalIdentityChangeFeedTrigger
         private const string LeaseCollectionName = "%DigitalIdentityLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%DigitalIdentityLeaseCollectionPrefix%";
 
-        public DigitalIdentityChangeFeedTrigger(IServiceBusClient serviceBusClient, 
-            ILoggerHelper loggerHelper, 
+        public DigitalIdentityChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
             ILogger<DigitalIdentityChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;

@@ -19,8 +19,8 @@ namespace NCS.DSS.ChangeFeedListener.GoalChangeFeedTrigger
         private const string LeaseCollectionName = "%GoalLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%GoalLeaseCollectionPrefix%";
 
-        public GoalChangeFeedTrigger(IServiceBusClient serviceBusClient, 
-            ILoggerHelper loggerHelper, 
+        public GoalChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
             ILogger<GoalChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;

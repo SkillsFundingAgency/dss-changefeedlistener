@@ -19,8 +19,8 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
         private const string LeaseCollectionName = "%WebChatLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%WebChatLeaseCollectionPrefix%";
 
-        public WebChatChangeFeedTrigger(IServiceBusClient serviceBusClient, 
-            ILoggerHelper loggerHelper, 
+        public WebChatChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
             ILogger<WebChatChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;

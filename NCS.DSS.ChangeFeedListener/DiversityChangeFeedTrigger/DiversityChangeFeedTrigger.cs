@@ -19,8 +19,8 @@ namespace NCS.DSS.ChangeFeedListener.DiversityChangeFeedTrigger
         private const string LeaseCollectionName = "%DiversityLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%DiversityLeaseCollectionPrefix%";
 
-        public DiversityChangeFeedTrigger(IServiceBusClient serviceBusClient, 
-            ILoggerHelper loggerHelper, 
+        public DiversityChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
             ILogger<DiversityChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;

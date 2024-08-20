@@ -19,8 +19,8 @@ namespace NCS.DSS.ChangeFeedListener.CustomerChangeFeedTrigger
         private const string LeaseCollectionName = "%CustomerLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%CustomerLeaseCollectionPrefix%";
 
-        public CustomerChangeFeedTrigger(IServiceBusClient serviceBusClient, 
-            ILoggerHelper loggerHelper, 
+        public CustomerChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
             ILogger<CustomerChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
