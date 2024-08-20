@@ -38,7 +38,6 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
             CreateLeaseContainerIfNotExists  = true
             )]  IReadOnlyList<Document> documents)
         {
-
             try
             {
                 foreach (var document in documents)
@@ -48,8 +47,6 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
                         Document = document,
                         IsAddress = true
                     };
-
-                    var coorelationId = Guid.NewGuid();
 
                     _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
                     await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);
