@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.Tests.ServiceBus
         private const string ValidConnectionString = "Endpoint=sb://test.servicebus.windows.net/;SharedAccessKeyName=TestKey;SharedAccessKey=TestAccessKey";
 
         public ServiceBusClientTests()
-        {            
+        {
             Environment.SetEnvironmentVariable("ChangeFeedQueueName", ValidQueueName);
             Environment.SetEnvironmentVariable("ServiceBusConnectionString", ValidConnectionString);
         }
@@ -58,7 +58,7 @@ namespace NCS.DSS.ChangeFeedListener.Tests.ServiceBus
             var changeFeedMessageModel = new ChangeFeedMessageModel();
 
             // Act & Assert
-             Assert.ThrowsAsync<ArgumentNullException>(() => serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel));
+            Assert.ThrowsAsync<ArgumentNullException>(() => serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace NCS.DSS.ChangeFeedListener.Tests.ServiceBus
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentNullException>(() => serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel));
-        }        
+        }
 
         private T GetPrivateField<T>(object obj, string fieldName)
         {
