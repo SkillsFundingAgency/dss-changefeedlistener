@@ -1,5 +1,4 @@
-﻿using System;
-using NCS.DSS.Customer.ReferenceData;
+﻿using NCS.DSS.Customer.ReferenceData;
 
 namespace NCS.DSS.ChangeFeedListener.Model
 {

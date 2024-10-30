@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using DFC.Common.Standard.Logging;
 using Microsoft.Azure.Documents;
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
@@ -14,6 +11,7 @@ namespace NCS.DSS.ChangeFeedListener.SessionChangeFeedTrigger
     {
         private readonly IServiceBusClient _serviceBusClient;
         private readonly ILoggerHelper _loggerHelper;
+        private readonly ILogger _logger;
 
         private const string DatabaseName = "%SessionDatabaseId%";
         private const string CollectionName = "%SessionCollectionId%";
@@ -21,13 +19,16 @@ namespace NCS.DSS.ChangeFeedListener.SessionChangeFeedTrigger
         private const string LeaseCollectionName = "%SessionLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%SessionLeaseCollectionPrefix%";
 
-        public SessionChangeFeedTrigger(IServiceBusClient serviceBusClient, ILoggerHelper loggerHelper)
+        public SessionChangeFeedTrigger(IServiceBusClient serviceBusClient,
+            ILoggerHelper loggerHelper,
+            ILogger<SessionChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
             _loggerHelper = loggerHelper;
+            _logger = logger;
         }
 
-        [FunctionName("SessionChangeFeedTrigger")]
+        [Function("SessionChangeFeedTrigger")]
         public async Task Run([CosmosDBTrigger(
             DatabaseName,
             CollectionName,
@@ -35,8 +36,7 @@ namespace NCS.DSS.ChangeFeedListener.SessionChangeFeedTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents,
-            ILogger log)
+            )] IReadOnlyList<Document> documents)
         {
             try
             {
@@ -48,13 +48,13 @@ namespace NCS.DSS.ChangeFeedListener.SessionChangeFeedTrigger
                         IsSession = true
                     };
 
-                    _loggerHelper.LogInformationMessage(log, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
+                    _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
                     await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);
                 }
             }
             catch (Exception ex)
             {
-                _loggerHelper.LogException(log, Guid.NewGuid(), "Error when trying to send message to service bus queue", ex);
+                _loggerHelper.LogException(_logger, Guid.NewGuid(), "Error when trying to send message to service bus queue", ex);
             }
         }
     }

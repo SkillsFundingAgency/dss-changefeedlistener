@@ -56,6 +56,6 @@ namespace NCS.DSS.Customer.ReferenceData
         Other = 98,
         [Description("Not provided")]
         NotProvided = 99,
-        
+
     }
 }

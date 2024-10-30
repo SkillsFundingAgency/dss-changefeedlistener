@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NCS.DSS.Customer.ReferenceData;
 using System.ComponentModel.DataAnnotations;
-using NCS.DSS.Customer.ReferenceData;
 
 namespace NCS.DSS.ChangeFeedListener.Model
 {
@@ -43,7 +41,7 @@ namespace NCS.DSS.ChangeFeedListener.Model
                                 "3 - Not applicable,  " +
                                 "99 - Not provided,  ")]
         public Gender? Gender { get; set; }
- 
+
         [Display(Description = "Customers unique learner number as issued by the learning record service")]
         [StringLength(10)]
         public string UniqueLearnerNumber { get; set; }

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NCS.DSS.ChangeFeedListener", "NCS.DSS.ChangeFeedListener\NCS.DSS.ChangeFeedListener.csproj", "{FA0970A2-FCE3-435F-B246-9182523422DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCS.DSS.ChangeFeedListener.Tests", "NCS.DSS.ChangeFeedListener.Tests\NCS.DSS.ChangeFeedListener.Tests.csproj", "{339D5A26-1EEB-408C-92AF-B64B7E8EC5E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FA0970A2-FCE3-435F-B246-9182523422DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA0970A2-FCE3-435F-B246-9182523422DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA0970A2-FCE3-435F-B246-9182523422DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{339D5A26-1EEB-408C-92AF-B64B7E8EC5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{339D5A26-1EEB-408C-92AF-B64B7E8EC5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{339D5A26-1EEB-408C-92AF-B64B7E8EC5E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{339D5A26-1EEB-408C-92AF-B64B7E8EC5E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

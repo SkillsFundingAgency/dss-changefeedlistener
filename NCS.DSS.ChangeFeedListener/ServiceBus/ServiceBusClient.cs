@@ -1,10 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Azure.Documents;
+﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.ServiceBus;
 using NCS.DSS.ChangeFeedListener.Model;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace NCS.DSS.ChangeFeedListener.ServiceBus
 {
@@ -34,7 +32,7 @@ namespace NCS.DSS.ChangeFeedListener.ServiceBus
                 throw new ArgumentNullException(nameof(changeFeedMessageModel));
 
             var queueClient = new QueueClient(_serviceBusConnectionString, _changeFeedQueueName);
-            
+
             var msg = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(changeFeedMessageModel)))
             {
                 ContentType = "application/json",
