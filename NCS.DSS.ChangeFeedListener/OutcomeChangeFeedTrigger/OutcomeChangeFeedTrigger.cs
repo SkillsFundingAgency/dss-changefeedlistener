@@ -1,5 +1,4 @@
-using DFC.Common.Standard.Logging;
-using Microsoft.Azure.Documents;
+using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
@@ -9,8 +8,8 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
 {
     public class OutcomeChangeFeedTrigger
     {
-        private readonly IServiceBusClient _serviceBusClient;
-        private readonly ILoggerHelper _loggerHelper;
+        private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
+       
         private readonly ILogger _logger;
 
         private const string DatabaseName = "%OutcomeDatabaseId%";
@@ -19,12 +18,12 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
         private const string LeaseCollectionName = "%OutcomeLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%OutcomeLeaseCollectionPrefix%";
 
-        public OutcomeChangeFeedTrigger(IServiceBusClient serviceBusClient,
-            ILoggerHelper loggerHelper,
+        public OutcomeChangeFeedTrigger(IChangeFeedListenerServiceBusClient serviceBusClient,
+            
             ILogger<OutcomeChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
-            _loggerHelper = loggerHelper;
+            
             _logger = logger;
         }
 
@@ -36,7 +35,7 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents)
+            )] IReadOnlyList<JsonDocument> documents)
         {
             try
             {
@@ -48,13 +47,14 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
                         IsOutcome = true
                     };
 
-                    _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
-                    await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);
+                    var documentId = document.RootElement.GetProperty("id").ToString();
+                    _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                    await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
                 }
             }
             catch (Exception ex)
             {
-                _loggerHelper.LogException(_logger, Guid.NewGuid(), "Error when trying to send message to service bus queue", ex);
+                _logger.LogError(ex, "Error when trying to send message to service bus queue");
             }
         }
     }

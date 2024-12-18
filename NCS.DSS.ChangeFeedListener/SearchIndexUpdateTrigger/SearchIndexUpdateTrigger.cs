@@ -4,13 +4,13 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
 using NCS.DSS.Customer.ReferenceData;
-using Document = Microsoft.Azure.Documents.Document;
-
+using Newtonsoft.Json;
+using System.Text.Json;
 namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 {
     public class SearchIndexUpdateTrigger
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<SearchIndexUpdateTrigger> _logger;
 
         private const string DatabaseName = "%CustomerDatabaseId%";
         private const string CollectionName = "%CustomerCollectionId%";
@@ -31,7 +31,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents)
+            )] IReadOnlyList<JsonDocument> documents)
         {
             _logger.LogInformation("SearchIndexUpdateTrigger fired.");
 
@@ -45,43 +45,12 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 
             if (documents != null && documents.Count > 0)
             {
-                var customers = documents.Select(doc => new Model.Customer()
-                {
-                    Id = doc.GetPropertyValue<Guid?>("id"),
-                    DateOfRegistration = doc.GetPropertyValue<DateTime?>("DateOfRegistration"),
-                    GivenName = doc.GetPropertyValue<string>("GivenName"),
-                    FamilyName = doc.GetPropertyValue<string>("FamilyName"),
-                    DateofBirth = doc.GetPropertyValue<DateTime?>("DateofBirth"),
-                    UniqueLearnerNumber = doc.GetPropertyValue<string>("UniqueLearnerNumber"),
-                    OptInUserResearch = doc.GetPropertyValue<bool?>("OptInUserResearch"),
-                    OptInMarketResearch = doc.GetPropertyValue<bool?>("OptInMarketResearch"),
-                    DateOfTermination = doc.GetPropertyValue<DateTime?>("DateOfTermination"),
-                    ReasonForTermination = doc.GetPropertyValue<ReasonForTermination?>("ReasonForTermination"),
-                    IntroducedBy = doc.GetPropertyValue<IntroducedBy?>("IntroducedBy"),
-                    IntroducedByAdditionalInfo = doc.GetPropertyValue<string>("IntroducedByAdditionalInfo"),
-                    LastModifiedDate = doc.GetPropertyValue<DateTime?>("LastModifiedDate"),
-                    LastModifiedTouchpointId = doc.GetPropertyValue<string>("LastModifiedTouchpointId")
-                }).ToList();
+                
+                var customers = documents.Select(doc => JsonConvert.DeserializeObject<Model.Customer>(doc.RootElement.GetRawText()))                 
+                .ToList();
 
-                var customersV2 = documents.Select(doc => new Model.CustomerSearch()
-                {
-                    CustomerId = doc.GetPropertyValue<Guid?>("id"),
-                    DateOfRegistration = doc.GetPropertyValue<DateTime?>("DateOfRegistration"),
-                    Title = doc.GetPropertyValue<Title>("Title"),
-                    GivenName = doc.GetPropertyValue<string>("GivenName"),
-                    FamilyName = doc.GetPropertyValue<string>("FamilyName"),
-                    DateofBirth = doc.GetPropertyValue<DateTime?>("DateofBirth"),
-                    Gender = doc.GetPropertyValue<Gender?>("Gender"),
-                    UniqueLearnerNumber = doc.GetPropertyValue<string>("UniqueLearnerNumber"),
-                    OptInUserResearch = doc.GetPropertyValue<bool?>("OptInUserResearch"),
-                    OptInMarketResearch = doc.GetPropertyValue<bool?>("OptInMarketResearch"),
-                    DateOfTermination = doc.GetPropertyValue<DateTime?>("DateOfTermination"),
-                    ReasonForTermination = doc.GetPropertyValue<ReasonForTermination?>("ReasonForTermination"),
-                    IntroducedBy = doc.GetPropertyValue<IntroducedBy?>("IntroducedBy"),
-                    IntroducedByAdditionalInfo = doc.GetPropertyValue<string>("IntroducedByAdditionalInfo"),
-                    LastModifiedDate = doc.GetPropertyValue<DateTime?>("LastModifiedDate"),
-                    LastModifiedTouchpointId = doc.GetPropertyValue<string>("LastModifiedTouchpointId")
-                }).ToList();
+                var customersV2 = documents.Select(doc => JsonConvert.DeserializeObject<Model.CustomerSearch>(doc.RootElement.GetRawText()))
+                .ToList();
 
                 try
                 {
@@ -95,7 +64,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                 catch (RequestFailedException e)
                 {
 
-                    _logger.LogError("Failed to update search", e);
+                    _logger.LogError(e, "Failed to update search");
                 }
                 try
                 {
@@ -109,7 +78,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                 }
                 catch (RequestFailedException e)
                 {
-                    _logger.LogError("Failed to update search", e);
+                    _logger.LogError(e,"Failed to update search");
                 }
             }
         }

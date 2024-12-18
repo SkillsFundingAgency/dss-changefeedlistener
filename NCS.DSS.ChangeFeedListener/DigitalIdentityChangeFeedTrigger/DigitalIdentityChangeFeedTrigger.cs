@@ -1,17 +1,15 @@
-﻿using DFC.Common.Standard.Logging;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
+using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedListener.DigitalIdentityChangeFeedTrigger
 {
     public class DigitalIdentityChangeFeedTrigger
     {
-        private readonly IServiceBusClient _serviceBusClient;
-        private readonly ILoggerHelper _loggerHelper;
-        private readonly ILogger _logger;
+        private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;       
+        private readonly ILogger<DigitalIdentityChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%DigitalIdentityDatabaseId%";
         private const string CollectionName = "%DigitalIdentityCollectionId%";
@@ -19,12 +17,11 @@ namespace NCS.DSS.ChangeFeedListener.DigitalIdentityChangeFeedTrigger
         private const string LeaseCollectionName = "%DigitalIdentityLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%DigitalIdentityLeaseCollectionPrefix%";
 
-        public DigitalIdentityChangeFeedTrigger(IServiceBusClient serviceBusClient,
-            ILoggerHelper loggerHelper,
+        public DigitalIdentityChangeFeedTrigger(IChangeFeedListenerServiceBusClient serviceBusClient,
             ILogger<DigitalIdentityChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
-            _loggerHelper = loggerHelper;
+            
             _logger = logger;
         }
 
@@ -36,7 +33,7 @@ namespace NCS.DSS.ChangeFeedListener.DigitalIdentityChangeFeedTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents)
+            )] IReadOnlyList<JsonDocument> documents)
         {
             try
             {
@@ -48,13 +45,14 @@ namespace NCS.DSS.ChangeFeedListener.DigitalIdentityChangeFeedTrigger
                         IsDigitalIdentity = true
                     };
 
-                    _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send digital identity document id: {0} to service bus queue", document.Id));
-                    await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);
+                    var documentId = document.RootElement.GetProperty("id").ToString();
+                    _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                    await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
                 }
             }
             catch (Exception ex)
             {
-                _loggerHelper.LogException(_logger, Guid.NewGuid(), "Error when trying to send digital identity message to service bus queue", ex);
+                _logger.LogError(ex,"Error when trying to send digital identity message to service bus queue");
             }
         }
     }
