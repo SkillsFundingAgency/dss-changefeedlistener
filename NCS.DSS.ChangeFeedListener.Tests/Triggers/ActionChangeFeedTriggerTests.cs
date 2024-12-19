@@ -8,8 +8,7 @@ namespace NCS.DSS.ChangeFeedListener.Tests.Triggers
 {
     public class ActionChangeFeedTriggerTests
     {
-        private Mock<ILogger<ActionChangeFeedTrigger.ActionChangeFeedTrigger>> _logger;
-        
+        private Mock<ILogger<ActionChangeFeedTrigger.ActionChangeFeedTrigger>> _logger;        
         private Mock<IChangeFeedListenerServiceBusClient> _serviceBusClient;
         private ActionChangeFeedTrigger.ActionChangeFeedTrigger _actionTrigger;
         private string _documentId = string.Empty;

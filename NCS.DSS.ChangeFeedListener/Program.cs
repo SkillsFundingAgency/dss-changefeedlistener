@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Azure.Messaging.ServiceBus;
 internal class Program
 {
     private static async Task Main(string[] args)
@@ -25,7 +26,7 @@ internal class Program
             })
             .ConfigureFunctionsWorkerDefaults((IFunctionsWorkerApplicationBuilder workerApplication) =>
                 {
-                    workerApplication.UseNewtonsoftJson();
+                    workerApplication.ConfigureSystemTextJson();
                 })
            .ConfigureServices((context, services) =>
            {
@@ -39,7 +40,7 @@ internal class Program
                services.AddSingleton(serviceProvider =>
                {
                    var settings = serviceProvider.GetRequiredService<IOptions<ChangeFeedListenerConfigurationSettings>>().Value;
-                   return new Azure.Messaging.ServiceBus.ServiceBusClient(settings.ServiceBusConnectionString);
+                   return new ServiceBusClient(settings.ServiceBusConnectionString);
                });
                services.AddLogging();
                services.Configure<LoggerFilterOptions>(options =>

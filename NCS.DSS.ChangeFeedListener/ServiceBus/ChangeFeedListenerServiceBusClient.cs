@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using NCS.DSS.ChangeFeedListener.Model;
 using Newtonsoft.Json;
 using System.Text;
-using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedListener.ServiceBus
 {

@@ -10,10 +10,10 @@
                 return false;
 
             var loggedMessage = logValues.FirstOrDefault(logValue => logValue.Key == "{OriginalFormat}").Value?.ToString();
-
-            var documentId = logValues.FirstOrDefault(logValue => logValue.Key == "DocumentID").Value?.ToString();
             if (loggedMessage == null)
                 return false;
+
+            var documentId = logValues.FirstOrDefault(logValue => logValue.Key == "DocumentID").Value?.ToString();           
 
             loggedMessage = loggedMessage.Replace("{DocumentID}", documentId);
 

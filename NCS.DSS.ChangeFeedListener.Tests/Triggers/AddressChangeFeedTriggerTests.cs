@@ -1,10 +1,8 @@
-﻿
-
-using Microsoft.Extensions.Logging;
-using Moq;using System.Text.Json;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using System.Text.Json;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
-using Newtonsoft.Json;
 
 namespace NCS.DSS.ChangeFeedListener.Tests.Triggers
 {
@@ -28,7 +26,7 @@ namespace NCS.DSS.ChangeFeedListener.Tests.Triggers
             var jsonDocument = $"{{\"id\": \"{_documentId}\", \"CustomerId\": \"259810ce-dc25-4028-ab45-000010c322c9\", \"Address1\": \"Adddress Line 1\",\"Address2\": \"Adddress Line 2\",\"Address3\": \"Adddress Line 3\",\"Address4\": \"Adddress Line 4\",\"Address5\": \"Adddress Line 5\",\"PostCode\": \"DD11DD\",\"AlternativePostCode\": \"CC11CC\",\"Longitude\": -2.97227,\"Latitude\": 56.46236,\"EffectiveFrom\": \"2018-06-19T09:01:00Z\",\"EffectiveTo\": \"2018-06-21T13:12:00Z\",\"LastModifiedDate\": \"2018-06-21T13:45:00Z\",\"LastModifiedTouchpointId\": \"9999999999\",\"SubcontractorId\": \"\",\"CreatedBy\": \"9999999999\",\"_rid\": \"6jwfAMrhsgLyjAAAAAAAAA==\",\"_self\": \"dbs/6jwfAA==/colls/6jwfAMrhsgI=/docs/6jwfAMrhsgLyjAAAAAAAAA==/\",\"_etag\": \"\\\"3800d72c-0000-0d00-0000-66bf0ba30000\\\"\",\"_attachments\": \"attachments/\",\"_ts\": 1723796387}}";
             _documentsList =
                 [
-                     JsonConvert.DeserializeObject<JsonDocument>(jsonDocument)
+                    JsonSerializer.Deserialize<JsonDocument>(jsonDocument)
                 ];
         }
 
@@ -53,20 +51,17 @@ namespace NCS.DSS.ChangeFeedListener.Tests.Triggers
             //Arrange
             var logMessage = string.Format("Attempting to send document id: {0} to service bus queue", _documentId);
 
-            _logger.Setup(l => l.LogInformation( It.IsAny<string>())).Verifiable();
-
             //Act
             await _addressTrigger.Run(_documentsList.AsReadOnly());
 
             //Assert
             _logger.Verify(l => l.Log(
-               It.Is<LogLevel>(l => l == LogLevel.Information),
-               It.IsAny<EventId>(),
-               logMessage,
-               It.Is<It.IsAnyType>((v, t) => true),
-               It.IsAny<Exception>(),
-               It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-               Times.Once);
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((x, _) => LogHelper.LogMessageMatcher(x, logMessage)),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                Times.Once);
         }
 
         [Test]
@@ -83,13 +78,12 @@ namespace NCS.DSS.ChangeFeedListener.Tests.Triggers
 
             //Assert
             _logger.Verify(l => l.Log(
-                It.Is<LogLevel>(l => l == LogLevel.Error),
-                It.IsAny<EventId>(),
-                logMessage,
-                It.Is<It.IsAnyType>((v, t) => true),
-                exception,
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-                Times.Once);
+                 LogLevel.Error,
+                 It.IsAny<EventId>(),
+                 It.Is<It.IsAnyType>((x, _) => LogHelper.LogMessageMatcher(x, logMessage)),
+                 exception,
+                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                 Times.Once);
         }
     }
 }
