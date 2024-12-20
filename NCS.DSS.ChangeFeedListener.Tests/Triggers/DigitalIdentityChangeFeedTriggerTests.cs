@@ -65,7 +65,7 @@ namespace NCS.DSS.ChangeFeedListener.Tests.Triggers
         {
             //Arrange
             var exception = new Exception();
-            var logMessage = "Error when trying to send digital identity message to service bus queue";
+            var logMessage = "Error when trying to send message to service bus queue";
 
             _serviceBusClient.Setup(s => s.SendChangeFeedMessageAsync(It.IsAny<string>(), It.IsAny<ChangeFeedMessageModel>()))
                 .Throws(exception);

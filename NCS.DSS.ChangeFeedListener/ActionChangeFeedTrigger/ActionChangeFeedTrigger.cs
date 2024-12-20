@@ -10,7 +10,6 @@ namespace NCS.DSS.ChangeFeedListener.ActionChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
         private readonly ILogger<ActionChangeFeedTrigger> _logger;
-
         private const string DatabaseName = "%ActionDatabaseId%";
         private const string CollectionName = "%ActionCollectionId%";
         private const string ConnectionString = "CosmosDBConnectionString";
@@ -35,24 +34,36 @@ namespace NCS.DSS.ChangeFeedListener.ActionChangeFeedTrigger
             )] IReadOnlyList<JsonDocument> documents
             )
         {
-            try
-            {
+            var functionName = nameof(ActionChangeFeedTrigger);
+            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
+
+            if (documents.Count > 0) {
+                _logger.LogInformation("Attempting to Send {Count} Documents from Action Cosomos DB to Service Bus", documents.Count);
                 foreach (var document in documents)
                 {
-                    var changeFeedMessageModel = new ChangeFeedMessageModel()
+                    try
                     {
-                        Document = document,
-                        IsAction = true
-                    };
-                    var documentId = document.RootElement.GetProperty("id").ToString();
-                    _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
-                    await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
+                        var changeFeedMessageModel = new ChangeFeedMessageModel()
+                        {
+                            Document = document,
+                            IsAction = true
+                        };
+                        var documentId = document.RootElement.GetProperty("id").ToString();
+                        _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                        await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error when trying to send message to service bus queue");
+                    }
                 }
+                _logger.LogInformation("Successfully Sent {Count} Documents from Action Cosomos DB to Service Bus", documents.Count);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Error when trying to send message to service bus queue");
+                _logger.LogInformation("No Documents found from Action Cosomos DB to Process");
             }
+            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
         }
     }
 }

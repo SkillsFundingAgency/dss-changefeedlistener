@@ -37,25 +37,37 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
             CreateLeaseContainerIfNotExists  = true
             )] IReadOnlyList<JsonDocument> documents)
         {
-            try
+            var functionName = nameof(OutcomeChangeFeedTrigger);
+            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
+
+            if (documents.Count > 0)
             {
+                _logger.LogInformation("Attempting to Send {Count} Documents from Outcome Cosomos DB to Service Bus", documents.Count);
                 foreach (var document in documents)
                 {
-                    var changeFeedMessageModel = new ChangeFeedMessageModel()
+                    try
                     {
-                        Document = document,
-                        IsOutcome = true
-                    };
-
-                    var documentId = document.RootElement.GetProperty("id").ToString();
-                    _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
-                    await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
+                        var changeFeedMessageModel = new ChangeFeedMessageModel()
+                        {
+                            Document = document,
+                            IsOutcome = true
+                        };
+                        var documentId = document.RootElement.GetProperty("id").ToString();
+                        _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                        await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error when trying to send message to service bus queue");
+                    }
                 }
+                _logger.LogInformation("Successfully Sent {Count} Documents from Outcome Cosomos DB to Service Bus", documents.Count);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Error when trying to send message to service bus queue");
+                _logger.LogInformation("No Documents found from Outcome Cosomos DB to Process");
             }
+            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
         }
     }
 }

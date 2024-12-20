@@ -30,21 +30,42 @@ namespace NCS.DSS.ChangeFeedListener.ServiceBus
 
         public async Task SendChangeFeedMessageAsync(string documentId, ChangeFeedMessageModel changeFeedMessageModel)
         {
-            var serviceBusSender = _serviceBusClient.CreateSender(_queueName);
-
-            if (documentId == null)
-                throw new ArgumentNullException(nameof(documentId));
-
-            if (changeFeedMessageModel == null)
-                throw new ArgumentNullException(nameof(changeFeedMessageModel));
-
-            var msg = new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(changeFeedMessageModel)))
+            try
             {
-                ContentType = "application/json",
-                MessageId = documentId + " " + DateTime.UtcNow
-            };
+                _logger.LogInformation("Attempting to Create Sender for Service Bus Queue {QueueName}", _queueName);
+                var serviceBusSender = _serviceBusClient.CreateSender(_queueName);
 
-            await serviceBusSender.SendMessageAsync(msg);
+                if (documentId == null)
+                {
+                    var ex = new ArgumentNullException(nameof(documentId));
+                    _logger.LogError(ex, "Failed to Send Message to Service Bus. Document ID is null");
+                    throw ex;
+                }
+
+                if (changeFeedMessageModel == null)
+                {
+                    var ex = new ArgumentNullException(nameof(changeFeedMessageModel));
+                    _logger.LogError(ex, "Failed to Send Message to Service Bus. ChangeFeedMessageModel is null");
+                    throw ex;
+                }
+
+                _logger.LogInformation("Attempting to Create Service Bus Message for Document ID {DocumentID}", documentId);
+                var msg = new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(changeFeedMessageModel)))
+                {
+                    ContentType = "application/json",
+                    MessageId = documentId + " " + DateTime.UtcNow
+                };
+                _logger.LogInformation("Attempting to Send Service Bus Message for Document ID {DocumentID}", documentId);
+                await serviceBusSender.SendMessageAsync(msg);
+                _logger.LogInformation("Successfully Sent Service Bus Message for Document ID {DocumentID}", documentId);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to Send Message to Service Bus. Exception Raised with Message {Exception}",ex.Message);
+                throw;
+            }
+           
         }
     }
 }

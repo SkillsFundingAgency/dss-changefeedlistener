@@ -26,7 +26,7 @@ internal class Program
             })
             .ConfigureFunctionsWorkerDefaults((IFunctionsWorkerApplicationBuilder workerApplication) =>
                 {
-                    workerApplication.UseNewtonsoftJson();
+                    workerApplication.ConfigureSystemTextJson();
                 })
            .ConfigureServices((context, services) =>
            {
