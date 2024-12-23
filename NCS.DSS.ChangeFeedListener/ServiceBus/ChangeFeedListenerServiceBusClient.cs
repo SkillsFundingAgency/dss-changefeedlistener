@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NCS.DSS.ChangeFeedListener.Model;
-using Newtonsoft.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedListener.ServiceBus
 {
@@ -50,7 +50,7 @@ namespace NCS.DSS.ChangeFeedListener.ServiceBus
                 }
 
                 _logger.LogInformation("Attempting to Create Service Bus Message for Document ID {DocumentID}", documentId);
-                var msg = new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(changeFeedMessageModel)))
+                var msg = new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(changeFeedMessageModel)))
                 {
                     ContentType = "application/json",
                     MessageId = documentId + " " + DateTime.UtcNow
