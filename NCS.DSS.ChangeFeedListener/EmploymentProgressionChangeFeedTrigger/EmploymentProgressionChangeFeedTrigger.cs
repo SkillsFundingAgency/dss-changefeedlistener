@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.EmploymentProgressionChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<EmploymentProgressionChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%EmploymentProgressionDatabaseId%";
         private const string CollectionName = "%EmploymentProgressionCollectionId%";

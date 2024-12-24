@@ -9,7 +9,7 @@ namespace NCS.DSS.ChangeFeedListener.ContactChangeFeedTrigger
     public class ContactChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
-        private readonly ILogger _logger;
+        private readonly ILogger<ContactChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%ContactDatabaseId%";
         private const string CollectionName = "%ContactCollectionId%";

@@ -3,7 +3,6 @@ using Azure.Search.Documents.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
-using NCS.DSS.Customer.ReferenceData;
 using Newtonsoft.Json;
 using System.Text.Json;
 namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger

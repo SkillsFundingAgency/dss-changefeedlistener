@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.TransferChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<TransferChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%TransferDatabaseId%";
         private const string CollectionName = "%TransferCollectionId%";
@@ -18,8 +18,7 @@ namespace NCS.DSS.ChangeFeedListener.TransferChangeFeedTrigger
         private const string LeaseCollectionName = "%TransferLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%TransferLeaseCollectionPrefix%";
 
-        public TransferChangeFeedTrigger(IChangeFeedListenerServiceBusClient serviceBusClient,
-            
+        public TransferChangeFeedTrigger(IChangeFeedListenerServiceBusClient serviceBusClient,            
             ILogger<TransferChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;

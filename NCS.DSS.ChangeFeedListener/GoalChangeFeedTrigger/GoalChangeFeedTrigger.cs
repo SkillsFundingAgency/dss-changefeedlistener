@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.GoalChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<GoalChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%GoalDatabaseId%";
         private const string CollectionName = "%GoalCollectionId%";

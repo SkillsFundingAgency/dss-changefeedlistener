@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.LearningProgressionChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<LearningProgressionChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%LearningProgressionDatabaseId%";
         private const string CollectionName = "%LearningProgressionCollectionId%";

@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.DiversityChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<DiversityChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%DiversityDatabaseId%";
         private const string CollectionName = "%DiversityCollectionId%";

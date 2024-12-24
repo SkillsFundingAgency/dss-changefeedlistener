@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<WebChatChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%WebChatDatabaseId%";
         private const string CollectionName = "%WebChatCollectionId%";

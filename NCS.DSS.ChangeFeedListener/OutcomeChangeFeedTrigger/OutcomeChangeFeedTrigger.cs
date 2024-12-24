@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.OutcomeChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<OutcomeChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%OutcomeDatabaseId%";
         private const string CollectionName = "%OutcomeCollectionId%";

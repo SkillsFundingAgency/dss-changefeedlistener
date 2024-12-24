@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.SessionChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<SessionChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%SessionDatabaseId%";
         private const string CollectionName = "%SessionCollectionId%";

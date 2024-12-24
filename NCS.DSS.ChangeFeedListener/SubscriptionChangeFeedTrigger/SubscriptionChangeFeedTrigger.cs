@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.SubscriptionChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<SubscriptionChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%SubscriptionDatabaseId%";
         private const string CollectionName = "%SubscriptionCollectionId%";

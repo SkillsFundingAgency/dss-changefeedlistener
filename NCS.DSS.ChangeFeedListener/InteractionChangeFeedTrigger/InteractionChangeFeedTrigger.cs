@@ -10,7 +10,7 @@ namespace NCS.DSS.ChangeFeedListener.InteractionChangeFeedTrigger
     {
         private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
        
-        private readonly ILogger _logger;
+        private readonly ILogger<InteractionChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%InteractionDatabaseId%";
         private const string CollectionName = "%InteractionCollectionId%";
