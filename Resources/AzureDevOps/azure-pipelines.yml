@@ -18,25 +18,9 @@ pool:
     - msbuild
     - visualstudio
 jobs:
-# Build the app with the dfc-dotnetframework-build template.  Runs if the output of TestBranchName is Version1
-- job: BuildDotNetFramework
-  displayName: Build-DotNetFramework
-  dependsOn: TestBranchName
-  condition: and(succeeded(), eq(dependencies.TestBranchName.outputs['ExecuteTestBranchNameScript.FunctionAppVersion'], 'Version1'))
-
-  steps:
-  - template: AzureDevOpsTemplates\Build\StepTemplates\dss-dotnetframework-build.yml@dfc-devops
-    parameters:
-      SolutionBaseName: $(SolutionBaseName)
-      BuildPlatform: $(BuildPlatform)
-      BuildConfiguration: $(BuildConfiguration)
-
-# Build the app with the dfc-dotnetcore-build template.  Runs if the output of TestBranchName is Version2+
 - job: BuildDotNetStandard
   displayName: Build-DotNetStandard
-  dependsOn: TestBranchName
-  condition: and(succeeded(), eq(dependencies.TestBranchName.outputs['ExecuteTestBranchNameScript.FunctionAppVersion'], 'Version2+'))
-
+  
   steps:
   - template: AzureDevOpsTemplates\Build\StepTemplates\dfc-dotnetcorefunctionapp-build-notests.yml@dfc-devops
     parameters:
@@ -45,7 +29,3 @@ jobs:
       BuildConfiguration: $(BuildConfiguration)
       GitVersionVersion: 5.12.x
       DotNetCoreVersion: 8.x
-
-
-
-
