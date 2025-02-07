@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appInsightsInstrumentationKey":{
+    "appInsightsInstrumentationKey": {
       "type": "string"
     },
     "functionAppPrefix": {
@@ -34,7 +34,9 @@
     },
     "cosmosDBConnectionString": {
       "type": "securestring"
-
+    },
+    "keyVaultName": {
+      "type": "string"
     }
   },
   "variables": {
@@ -50,7 +52,7 @@
         "FUNCTIONS_EXTENSION_VERSION": "~4",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
         "MSDEPLOY_RENAME_LOCKED_FILES": "1",
-        "AzureWebJobsStorage": "[parameters('storageConnectionString')]",
+        "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=SharedStorageAccountConnectionString)', parameters('keyVaultName'))]",
         "ActionPlanCollectionId": "actionplans",
         "ActionPlanDatabaseId": "actionplans",
         "ActionPlanLeaseCollectionName": "actionplans-lease",

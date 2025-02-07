@@ -1,5 +1,4 @@
-using DFC.Common.Standard.Logging;
-using Microsoft.Azure.Documents;
+using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
@@ -9,9 +8,9 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
 {
     public class WebChatChangeFeedTrigger
     {
-        private readonly IServiceBusClient _serviceBusClient;
-        private readonly ILoggerHelper _loggerHelper;
-        private readonly ILogger _logger;
+        private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
+       
+        private readonly ILogger<WebChatChangeFeedTrigger> _logger;
 
         private const string DatabaseName = "%WebChatDatabaseId%";
         private const string CollectionName = "%WebChatCollectionId%";
@@ -19,12 +18,12 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
         private const string LeaseCollectionName = "%WebChatLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%WebChatLeaseCollectionPrefix%";
 
-        public WebChatChangeFeedTrigger(IServiceBusClient serviceBusClient,
-            ILoggerHelper loggerHelper,
+        public WebChatChangeFeedTrigger(IChangeFeedListenerServiceBusClient serviceBusClient,
+            
             ILogger<WebChatChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
-            _loggerHelper = loggerHelper;
+            
             _logger = logger;
         }
 
@@ -36,27 +35,39 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents)
+            )] IReadOnlyList<JsonDocument> documents)
         {
+            var functionName = nameof(WebChatChangeFeedTrigger);
+            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
 
-            try
+            if (documents.Count > 0)
             {
+                _logger.LogInformation("Attempting to Send {Count} Documents from WebChat Cosomos DB to Service Bus", documents.Count);
                 foreach (var document in documents)
                 {
-                    var changeFeedMessageModel = new ChangeFeedMessageModel()
+                    try
                     {
-                        Document = document,
-                        IsWebChat = true
-                    };
-
-                    _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
-                    await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);
+                        var changeFeedMessageModel = new ChangeFeedMessageModel()
+                        {
+                            Document = document,
+                            IsWebChat = true
+                        };
+                        var documentId = document.RootElement.GetProperty("id").ToString();
+                        _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                        await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error when trying to send message to service bus queue");
+                    }
                 }
+                _logger.LogInformation("Successfully Sent {Count} Documents from WebChat Cosomos DB to Service Bus", documents.Count);
             }
-            catch (Exception ex)
+            else
             {
-                _loggerHelper.LogException(_logger, Guid.NewGuid(), "Error when trying to send message to service bus queue", ex);
+                _logger.LogInformation("No Documents found from WebChat Cosomos DB to Process");
             }
+            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
         }
 
     }

@@ -3,14 +3,13 @@ using Azure.Search.Documents.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.Customer.Helpers;
-using NCS.DSS.Customer.ReferenceData;
-using Document = Microsoft.Azure.Documents.Document;
-
+using Newtonsoft.Json;
+using System.Text.Json;
 namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 {
     public class SearchIndexUpdateTrigger
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<SearchIndexUpdateTrigger> _logger;
 
         private const string DatabaseName = "%CustomerDatabaseId%";
         private const string CollectionName = "%CustomerCollectionId%";
@@ -31,87 +30,61 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )] IReadOnlyList<Document> documents)
+            )] IReadOnlyList<JsonDocument> documents)
         {
-            _logger.LogInformation("SearchIndexUpdateTrigger fired.");
+            var functionName = nameof(SearchIndexUpdateTrigger);
+            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
 
-
-            _logger.LogInformation("Getting search service client");
+            _logger.LogInformation("Attempting get search service client");
 
             var indexClient = SearchHelper.GetSearchServiceClient(); ;
             var indexClientV2 = SearchHelper.GetSearchServiceClientV2();
 
-            _logger.LogInformation("Retrieved index client");
+            _logger.LogInformation("Retrieved Search Service client");
 
             if (documents != null && documents.Count > 0)
-            {
-                var customers = documents.Select(doc => new Model.Customer()
-                {
-                    Id = doc.GetPropertyValue<Guid?>("id"),
-                    DateOfRegistration = doc.GetPropertyValue<DateTime?>("DateOfRegistration"),
-                    GivenName = doc.GetPropertyValue<string>("GivenName"),
-                    FamilyName = doc.GetPropertyValue<string>("FamilyName"),
-                    DateofBirth = doc.GetPropertyValue<DateTime?>("DateofBirth"),
-                    UniqueLearnerNumber = doc.GetPropertyValue<string>("UniqueLearnerNumber"),
-                    OptInUserResearch = doc.GetPropertyValue<bool?>("OptInUserResearch"),
-                    OptInMarketResearch = doc.GetPropertyValue<bool?>("OptInMarketResearch"),
-                    DateOfTermination = doc.GetPropertyValue<DateTime?>("DateOfTermination"),
-                    ReasonForTermination = doc.GetPropertyValue<ReasonForTermination?>("ReasonForTermination"),
-                    IntroducedBy = doc.GetPropertyValue<IntroducedBy?>("IntroducedBy"),
-                    IntroducedByAdditionalInfo = doc.GetPropertyValue<string>("IntroducedByAdditionalInfo"),
-                    LastModifiedDate = doc.GetPropertyValue<DateTime?>("LastModifiedDate"),
-                    LastModifiedTouchpointId = doc.GetPropertyValue<string>("LastModifiedTouchpointId")
-                }).ToList();
+            {                
+                var customers = documents.Select(doc => JsonConvert.DeserializeObject<Model.Customer>(doc.RootElement.GetRawText()))                 
+                .ToList();
 
-                var customersV2 = documents.Select(doc => new Model.CustomerSearch()
-                {
-                    CustomerId = doc.GetPropertyValue<Guid?>("id"),
-                    DateOfRegistration = doc.GetPropertyValue<DateTime?>("DateOfRegistration"),
-                    Title = doc.GetPropertyValue<Title>("Title"),
-                    GivenName = doc.GetPropertyValue<string>("GivenName"),
-                    FamilyName = doc.GetPropertyValue<string>("FamilyName"),
-                    DateofBirth = doc.GetPropertyValue<DateTime?>("DateofBirth"),
-                    Gender = doc.GetPropertyValue<Gender?>("Gender"),
-                    UniqueLearnerNumber = doc.GetPropertyValue<string>("UniqueLearnerNumber"),
-                    OptInUserResearch = doc.GetPropertyValue<bool?>("OptInUserResearch"),
-                    OptInMarketResearch = doc.GetPropertyValue<bool?>("OptInMarketResearch"),
-                    DateOfTermination = doc.GetPropertyValue<DateTime?>("DateOfTermination"),
-                    ReasonForTermination = doc.GetPropertyValue<ReasonForTermination?>("ReasonForTermination"),
-                    IntroducedBy = doc.GetPropertyValue<IntroducedBy?>("IntroducedBy"),
-                    IntroducedByAdditionalInfo = doc.GetPropertyValue<string>("IntroducedByAdditionalInfo"),
-                    LastModifiedDate = doc.GetPropertyValue<DateTime?>("LastModifiedDate"),
-                    LastModifiedTouchpointId = doc.GetPropertyValue<string>("LastModifiedTouchpointId")
-                }).ToList();
+                var customerSearch = documents.Select(doc => JsonConvert.DeserializeObject<Model.CustomerSearch>(doc.RootElement.GetRawText()))
+                .ToList();
 
                 try
                 {
-                    _logger.LogInformation("attempting to merge docs to azure search");
+                    _logger.LogInformation("Attempting to merge {Count} Customer docs to azure search",customers.Count);
+
                     var batch = IndexDocumentsBatch.MergeOrUpload(customers);
                     await indexClient.IndexDocumentsAsync(batch);
 
-                    _logger.LogInformation("successfully merged docs to azure search");
+                    _logger.LogInformation("Successfully merged {Count} Customer docs to azure search",customers.Count);
 
                 }
                 catch (RequestFailedException e)
                 {
-
-                    _logger.LogError("Failed to update search", e);
+                    _logger.LogError(e, "Failed to update Customer Docs");
                 }
                 try
                 {
-                    _logger.LogInformation("attempting to merge docs to azure search V2");
-                    //V2
-                    var batch = IndexDocumentsBatch.MergeOrUpload(customersV2);
+                    _logger.LogInformation("Attempting to merge {Count} Customer Search docs to azure search",customerSearch.Count);
+
+                    var batch = IndexDocumentsBatch.MergeOrUpload(customerSearch);
                     await indexClientV2.IndexDocumentsAsync(batch);
 
-                    _logger.LogInformation("successfully merged docs to azure search V2");
+                    _logger.LogInformation("Successfully merged {Count} Customer Search docs to azure search", customerSearch.Count);
 
                 }
                 catch (RequestFailedException e)
                 {
-                    _logger.LogError("Failed to update search", e);
+                    _logger.LogError(e, "Failed to update Customer Search Docs");
                 }
             }
+            else
+            {
+                _logger.LogWarning("No Documents found to Update Search Index");
+            }
+                
+            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
         }
     }
 }
