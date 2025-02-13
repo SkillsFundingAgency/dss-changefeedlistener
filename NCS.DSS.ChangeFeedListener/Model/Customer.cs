@@ -86,6 +86,7 @@ namespace NCS.DSS.ChangeFeedListener.Model
                                 "22 - University,  " +
                                 "23 - Word of Mouth,  " +
                                 "24 - World Skills UK Live,  " +
+                                "25 - National Retraining Scheme,  " +
                                 "27 - Job Centre Plus WITH Data,  " +
                                 "28 - Job Centre Plus WITHOUT Data,  " +
                                 "98 - Other,  " +

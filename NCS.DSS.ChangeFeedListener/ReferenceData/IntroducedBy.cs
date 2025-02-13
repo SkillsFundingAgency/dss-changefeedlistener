@@ -50,6 +50,8 @@ namespace NCS.DSS.Customer.ReferenceData
         WordofMouth = 23,
         [Description("World Skills UK Live")]
         WorldSkillsUKLive = 24,
+        [Description("NationalRetrainingScheme")]
+        NationalRetrainingScheme = 25,
         [Description("Job Centre Plus WITH Data")]
         JCPWithData = 27,
         [Description("Job Centre Plus WITHOUT Data")]
