@@ -22,8 +22,6 @@ namespace NCS.DSS.Customer.ReferenceData
         Employer = 8,
         [Description("Facebook")]
         Facebook = 9,
-        [Description("Job Centre Plus")]
-        JobCentrePlus = 10,
         [Description("LEP")]
         LEP = 11,
         [Description("National careers service website")]

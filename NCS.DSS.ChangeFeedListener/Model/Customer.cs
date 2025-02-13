@@ -72,7 +72,6 @@ namespace NCS.DSS.ChangeFeedListener.Model
                                 "7 - Community Centre / Library,  " +
                                 "8 - Employer,  " +
                                 "9 - Facebook,  " +
-                                "10 - Job Centre Plus,  " +
                                 "11 - LEP,  " +
                                 "12 - National careers service website,  " +
                                 "13 - Newspaper / magazine,  " +
