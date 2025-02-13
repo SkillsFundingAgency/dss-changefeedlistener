@@ -1,5 +1,5 @@
-﻿using NCS.DSS.Customer.ReferenceData;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using NCS.DSS.ChangeFeedListener.ReferenceData;
 
 namespace NCS.DSS.ChangeFeedListener.Model
 {
