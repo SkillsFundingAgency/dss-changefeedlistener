@@ -63,6 +63,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                 catch (RequestFailedException e)
                 {
                     _logger.LogError(e, "Failed to update Customer Docs");
+                    throw;
                 }
                 try
                 {
@@ -77,6 +78,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
                 catch (RequestFailedException e)
                 {
                     _logger.LogError(e, "Failed to update Customer Search Docs");
+                    throw;
                 }
             }
             else
