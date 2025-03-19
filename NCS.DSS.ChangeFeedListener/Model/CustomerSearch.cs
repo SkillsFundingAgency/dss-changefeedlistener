@@ -4,7 +4,8 @@ namespace NCS.DSS.ChangeFeedListener.Model
 {
     public class CustomerSearch
     {
-        public Guid? id { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "id")]
+        public Guid? CustomerId { get; set; }
 
         public DateTime? DateOfRegistration { get; set; }
 
