@@ -1,30 +1,25 @@
-using DFC.Common.Standard.Logging;
-using Microsoft.Azure.Documents;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
+using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
 {
     public class AddressChangeFeedTrigger
     {
-        private readonly IServiceBusClient _serviceBusClient;
-        private readonly ILoggerHelper _loggerHelper;
-        private readonly ILogger _logger;
-
+        private readonly IChangeFeedListenerServiceBusClient _serviceBusClient;
+        private readonly ILogger<AddressChangeFeedTrigger> _logger;
         private const string DatabaseName = "%AddressDatabaseId%";
         private const string CollectionName = "%AddressCollectionId%";
         private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%AddressLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%AddressLeaseCollectionPrefix%";
 
-        public AddressChangeFeedTrigger(IServiceBusClient serviceBusClient,
-            ILoggerHelper loggerHelper,
+        public AddressChangeFeedTrigger(IChangeFeedListenerServiceBusClient serviceBusClient,
             ILogger<AddressChangeFeedTrigger> logger)
         {
             _serviceBusClient = serviceBusClient;
-            _loggerHelper = loggerHelper;
             _logger = logger;
         }
 
@@ -36,26 +31,39 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
-            )]  IReadOnlyList<Document> documents)
+            )]  IReadOnlyList<JsonDocument> documents)
         {
-            try
+            var functionName = nameof(AddressChangeFeedTrigger);
+            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
+
+            if (documents.Count > 0)
             {
+                _logger.LogInformation("Attempting to Send {Count} Documents from Address Cosomos DB to Service Bus", documents.Count);
                 foreach (var document in documents)
                 {
-                    var changeFeedMessageModel = new ChangeFeedMessageModel()
+                    try
                     {
-                        Document = document,
-                        IsAddress = true
-                    };
-
-                    _loggerHelper.LogInformationMessage(_logger, Guid.NewGuid(), string.Format("Attempting to send document id: {0} to service bus queue", document.Id));
-                    await _serviceBusClient.SendChangeFeedMessageAsync(document, changeFeedMessageModel);
+                        var changeFeedMessageModel = new ChangeFeedMessageModel()
+                        {
+                            Document = document,
+                            IsAddress = true
+                        };
+                        var documentId = document.RootElement.GetProperty("id").ToString();
+                        _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                        await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error when trying to send message to service bus queue");
+                    }
                 }
+                _logger.LogInformation("Successfully Sent {Count} Documents from Address Cosomos DB to Service Bus", documents.Count);
             }
-            catch (Exception ex)
+            else
             {
-                _loggerHelper.LogException(_logger, Guid.NewGuid(), "Error when trying to send message to service bus queue", ex);
+                _logger.LogInformation("No Documents found from Address Cosomos DB to Process");
             }
+            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
         }
     }
 }

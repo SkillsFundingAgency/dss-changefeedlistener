@@ -1,10 +1,10 @@
-﻿using Microsoft.Azure.Documents;
+﻿using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedListener.Model
 {
     public class ChangeFeedMessageModel
     {
-        public Document Document { get; set; }
+        public JsonDocument Document { get; set; }
         public bool IsAction { get; set; }
         public bool IsActionPlan { get; set; }
         public bool IsAddress { get; set; }

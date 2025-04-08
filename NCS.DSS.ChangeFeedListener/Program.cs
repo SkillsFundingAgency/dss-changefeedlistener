@@ -1,28 +1,62 @@
 using Azure.Core.Serialization;
-using DFC.Common.Standard.Logging;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
-var host = new HostBuilder()
-.ConfigureFunctionsWorkerDefaults((IFunctionsWorkerApplicationBuilder workerApplication) =>
-                {
-                    workerApplication.UseNewtonsoftJson();
-                })
-    .ConfigureServices(services =>
+using Azure.Messaging.ServiceBus;
+internal class Program
+{
+    private static async Task Main(string[] args)
     {
-        services.AddSingleton<IServiceBusClient, ServiceBusClient>();
-        services.AddSingleton<ILoggerHelper, LoggerHelper>();
-        services.AddLogging();
-    })
-    .Build();
-host.Run();
+        var host = new HostBuilder().ConfigureFunctionsWebApplication()
+            .ConfigureAppConfiguration(configBuilder =>
+            {
+                configBuilder.SetBasePath(Environment.CurrentDirectory)
+                    .AddJsonFile("local.settings.json", optional: true,
+                        reloadOnChange: false)
+                    .AddEnvironmentVariables();
+            })
+            .ConfigureFunctionsWorkerDefaults((IFunctionsWorkerApplicationBuilder workerApplication) =>
+                {
+                    workerApplication.ConfigureSystemTextJson();
+                })
+           .ConfigureServices((context, services) =>
+           {
+               var configuration = context.Configuration;
+               services.AddOptions<ChangeFeedListenerConfigurationSettings>()
+                   .Bind(configuration);
 
+               services.AddApplicationInsightsTelemetryWorkerService();
+               services.ConfigureFunctionsApplicationInsights();
+               services.AddSingleton<IChangeFeedListenerServiceBusClient, ChangeFeedListenerServiceBusClient>();
+               services.AddSingleton(serviceProvider =>
+               {
+                   var settings = serviceProvider.GetRequiredService<IOptions<ChangeFeedListenerConfigurationSettings>>().Value;
+                   return new ServiceBusClient(settings.ServiceBusConnectionString);
+               });
+               services.AddLogging();
+               services.Configure<LoggerFilterOptions>(options =>
+               {
+                   LoggerFilterRule toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName
+                       == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                   if (toRemove is not null)
+                   {
+                       options.Rules.Remove(toRemove);
+                   }
+               });
+           })
+            .Build();
+        await host.RunAsync();
+    }
+}
 
 internal static class WorkerConfigurationExtensions
 {

@@ -6,7 +6,7 @@ namespace NCS.DSS.ChangeFeedListener.Model
     public class Customer : ICustomer
     {
         [Display(Description = "Unique identifier of a customer")]
-        public Guid? Id { get; set; }
+        public Guid? id { get; set; }
 
         [Display(Description = "Date and time the customer was first recognised by the National Careers Service")]
         public DateTime? DateOfRegistration { get; set; }
@@ -87,6 +87,8 @@ namespace NCS.DSS.ChangeFeedListener.Model
                                 "22 - University,  " +
                                 "23 - Word of Mouth,  " +
                                 "24 - World Skills UK Live,  " +
+                                "27 - Job Centre Plus WITH Data,  " +
+                                "28 - Job Centre Plus WITHOUT Data,  " +
                                 "98 - Other,  " +
                                 "99 - Not provided  ")]
         public IntroducedBy? IntroducedBy { get; set; }
