@@ -127,7 +127,11 @@
         "CustomerSearchIndexName": "customer-search-index",
         "CustomerSearchIndexNameV2": "customer-search-index-v2",
         "SearchServiceName": "[parameters('searchServiceName')]",
-        "SearchServiceAdminApiKey": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=SharedSearchAdminKey)', parameters('keyVaultName'))]"
+        "SearchServiceAdminApiKey": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=SharedSearchAdminKey)', parameters('keyVaultName'))]",
+        "DigitalIdentityDatabaseId": "digitalidentities",
+        "DigitalIdentityCollectionId": "digitalidentities",
+        "DigitalIdentityLeaseCollectionName": "digitalidentities-lease",
+        "DigitalIdentityLeaseCollectionPrefix": "digitalidentitiesChangeFeedPrefix"
       }
     },
     {
