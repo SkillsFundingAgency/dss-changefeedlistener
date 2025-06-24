@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace NCS.DSS.Customer.ReferenceData
+namespace NCS.DSS.ChangeFeedListener.ReferenceData
 {
     public enum Gender
     {
