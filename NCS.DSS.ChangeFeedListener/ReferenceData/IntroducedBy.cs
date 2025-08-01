@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace NCS.DSS.Customer.ReferenceData
+namespace NCS.DSS.ChangeFeedListener.ReferenceData
 {
     public enum IntroducedBy
     {
@@ -22,8 +22,6 @@ namespace NCS.DSS.Customer.ReferenceData
         Employer = 8,
         [Description("Facebook")]
         Facebook = 9,
-        [Description("Job Centre Plus")]
-        JobCentrePlus = 10,
         [Description("LEP")]
         LEP = 11,
         [Description("National careers service website")]
@@ -52,6 +50,8 @@ namespace NCS.DSS.Customer.ReferenceData
         WordofMouth = 23,
         [Description("World Skills UK Live")]
         WorldSkillsUKLive = 24,
+        [Description("NationalRetrainingScheme")]
+        NationalRetrainingScheme = 25,
         [Description("Job Centre Plus WITH Data")]
         JCPWithData = 27,
         [Description("Job Centre Plus WITHOUT Data")]

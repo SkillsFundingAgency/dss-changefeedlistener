@@ -36,10 +36,6 @@
         public string DataCollectionsDatabaseId { get; set; }
         public string DataCollectionsLeaseCollectionName { get; set; }
         public string DataCollectionsLeaseCollectionPrefix { get; set; }
-        public string DigitalIdentityCollectionId { get; set; }
-        public string DigitalIdentityDatabaseId { get; set; }
-        public string DigitalIdentityLeaseCollectionName { get; set; }
-        public string DigitalIdentityLeaseCollectionPrefix { get; set; }
         public string DiversityCollectionId { get; set; }
         public string DiversityDatabaseId { get; set; }
         public string DiversityLeaseCollectionName { get; set; }

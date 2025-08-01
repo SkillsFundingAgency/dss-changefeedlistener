@@ -1,5 +1,5 @@
-﻿using NCS.DSS.Customer.ReferenceData;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using NCS.DSS.ChangeFeedListener.ReferenceData;
 
 namespace NCS.DSS.ChangeFeedListener.Model
 {
@@ -72,7 +72,6 @@ namespace NCS.DSS.ChangeFeedListener.Model
                                 "7 - Community Centre / Library,  " +
                                 "8 - Employer,  " +
                                 "9 - Facebook,  " +
-                                "10 - Job Centre Plus,  " +
                                 "11 - LEP,  " +
                                 "12 - National careers service website,  " +
                                 "13 - Newspaper / magazine,  " +
@@ -87,6 +86,7 @@ namespace NCS.DSS.ChangeFeedListener.Model
                                 "22 - University,  " +
                                 "23 - Word of Mouth,  " +
                                 "24 - World Skills UK Live,  " +
+                                "25 - National Retraining Scheme,  " +
                                 "27 - Job Centre Plus WITH Data,  " +
                                 "28 - Job Centre Plus WITHOUT Data,  " +
                                 "98 - Other,  " +
