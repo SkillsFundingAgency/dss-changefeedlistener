@@ -35,9 +35,6 @@
         "cosmosDBEndpoint": {
             "type": "securestring"
         },
-        "cosmosDBConnectionString": {
-            "type": "securestring"
-        },
         "keyVaultName": {
             "type": "string"
         }
