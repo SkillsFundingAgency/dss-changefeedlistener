@@ -32,8 +32,11 @@
         "serviceBusConnectionString": {
             "type": "securestring"
         },
-        "cosmosDbEndpoint": {
-            "type": "string"
+        "cosmosDBEndpoint": {
+            "type": "securestring"
+        },
+        "cosmosDBConnectionString": {
+            "type": "securestring"
         },
         "keyVaultName": {
             "type": "string"
@@ -123,7 +126,7 @@
             "WebChatLeaseCollectionPrefix": "WebChatChangeFeedPrefix",
             "ChangeFeedQueueName": "dss.changefeedqueue",
             "ServiceBusConnectionString": "[parameters('serviceBusConnectionString')]",
-            "CosmosDB__accountEndpoint": "[parameters('cosmosDbEndpoint')]",
+            "CosmosDB__accountEndpoint": "[parameters('cosmosDBEndpoint')]",
             "CosmosDB__credential": "managedidentity",
             "CustomerSearchIndexName": "customer-search-index",
             "CustomerSearchIndexNameV2": "customer-search-index-v2",
