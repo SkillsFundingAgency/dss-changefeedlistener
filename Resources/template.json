@@ -1,44 +1,44 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appInsightsInstrumentationKey": {
-      "type": "string"
+    "parameters": {
+        "appInsightsInstrumentationKey": {
+            "type": "string"
+        },
+        "functionAppPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Prefix for the function app resources, in the form dfc-env-proj-fnapp"
+            }
+        },
+        "functionAppSuffix": {
+            "type": "string",
+            "metadata": {
+                "description": "Suffix for the function app resources, in the form version number"
+            }
+        },
+        "searchServiceName": {
+            "type": "string"
+        },
+        "searchServiceAdminApiKey": {
+            "type": "securestring"
+        },
+        "storageConnectionString": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Connection string for the storage account to store function app files"
+            }
+        },
+        "serviceBusConnectionString": {
+            "type": "securestring"
+        },
+        "cosmosDbEndpoint": {
+            "type": "string"
+        },
+        "keyVaultName": {
+            "type": "string"
+        }
     },
-    "functionAppPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Prefix for the function app resources, in the form dfc-env-proj-fnapp"
-      }
-    },
-    "functionAppSuffix": {
-      "type": "string",
-      "metadata": {
-        "description": "Suffix for the function app resources, in the form version number"
-      }
-    },
-    "searchServiceName": {
-      "type": "string"
-    },
-    "searchServiceAdminApiKey": {
-      "type": "securestring"
-    },
-    "storageConnectionString": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Connection string for the storage account to store function app files"
-      }
-    },
-    "serviceBusConnectionString": {
-      "type": "securestring"
-    },
-    "cosmosDBEndpoint": {
-      "type": "securestring"
-    },
-    "keyVaultName": {
-      "type": "string"
-    }
-  },
   "variables": {
     "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa', parameters('functionAppSuffix'))]"
   },
@@ -123,7 +123,7 @@
             "WebChatLeaseCollectionPrefix": "WebChatChangeFeedPrefix",
             "ChangeFeedQueueName": "dss.changefeedqueue",
             "ServiceBusConnectionString": "[parameters('serviceBusConnectionString')]",
-            "CosmosDB__accountEndpoint": "[parameters('cosmosDBEndpoint')]",
+            "CosmosDB__accountEndpoint": "[parameters('cosmosDbEndpoint')]",
             "CosmosDB__credential": "managedidentity",
             "CustomerSearchIndexName": "customer-search-index",
             "CustomerSearchIndexNameV2": "customer-search-index-v2",
