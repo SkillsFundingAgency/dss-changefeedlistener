@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using NCS.DSS.ChangeFeedListener.Constants;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
 
@@ -14,7 +15,6 @@ namespace NCS.DSS.ChangeFeedListener.InteractionChangeFeedTrigger
 
         private const string DatabaseName = "%InteractionDatabaseId%";
         private const string CollectionName = "%InteractionCollectionId%";
-        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%InteractionLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%InteractionLeaseCollectionPrefix%";
 
@@ -31,7 +31,7 @@ namespace NCS.DSS.ChangeFeedListener.InteractionChangeFeedTrigger
         public async Task Run([CosmosDBTrigger(
                 DatabaseName,
                 CollectionName,
-                Connection = ConnectionString,
+                Connection = ConfigKeys.CosmosDBConnectionPrefix,
                 LeaseContainerName = LeaseCollectionName,
                 LeaseContainerPrefix = LeaseCollectionPrefix,
                 CreateLeaseContainerIfNotExists  = true

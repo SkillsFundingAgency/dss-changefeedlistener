@@ -2,6 +2,7 @@ using Azure;
 using Azure.Search.Documents.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using NCS.DSS.ChangeFeedListener.Constants;
 using NCS.DSS.Customer.Helpers;
 using Newtonsoft.Json;
 using System.Text.Json;
@@ -13,7 +14,6 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
 
         private const string DatabaseName = "%CustomerDatabaseId%";
         private const string CollectionName = "%CustomerCollectionId%";
-        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%CustomerLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "Search";
 
@@ -26,7 +26,7 @@ namespace NCS.DSS.ChangeFeedListener.SearchIndexUpdateTrigger
         public async Task Run([CosmosDBTrigger(
             DatabaseName,
             CollectionName,
-            Connection = ConnectionString,
+            Connection = ConfigKeys.CosmosDBConnectionPrefix,
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
