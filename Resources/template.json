@@ -23,18 +23,6 @@
     "searchServiceAdminApiKey": {
       "type": "securestring"
     },
-    "storageConnectionString": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Connection string for the storage account to store function app files"
-      }
-    },
-    "serviceBusConnectionString": {
-      "type": "securestring"
-    },
-    "cosmosDBConnectionString": {
-      "type": "securestring"
-    },
     "keyVaultName": {
       "type": "string"
     }
@@ -122,8 +110,8 @@
         "WebChatLeaseCollectionName": "WebChat-lease",
         "WebChatLeaseCollectionPrefix": "WebChatChangeFeedPrefix",
         "ChangeFeedQueueName": "dss.changefeedqueue",
-        "ServiceBusConnectionString": "[parameters('serviceBusConnectionString')]",
-        "CosmosDBConnectionString": "[parameters('cosmosDBConnectionString')]",
+        "ServiceBusConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=ServiceBusConnectionString)', parameters('keyVaultName'))]",
+        "CosmosDBConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=CosmosDBConnectionString)', parameters('keyVaultName'))]",
         "CustomerSearchIndexName": "customer-search-index",
         "CustomerSearchIndexNameV2": "customer-search-index-v2",
         "SearchServiceName": "[parameters('searchServiceName')]",
