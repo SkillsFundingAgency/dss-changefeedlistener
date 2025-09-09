@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using NCS.DSS.ChangeFeedListener.Constants;
 using NCS.DSS.ChangeFeedListener.Model;
 using NCS.DSS.ChangeFeedListener.ServiceBus;
 
@@ -14,7 +15,6 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
 
         private const string DatabaseName = "%WebChatDatabaseId%";
         private const string CollectionName = "%WebChatCollectionId%";
-        private const string ConnectionString = "CosmosDBConnectionString";
         private const string LeaseCollectionName = "%WebChatLeaseCollectionName%";
         private const string LeaseCollectionPrefix = "%WebChatLeaseCollectionPrefix%";
 
@@ -31,7 +31,7 @@ namespace NCS.DSS.ChangeFeedListener.WebChatChangeFeedTrigger
         public async Task Run([CosmosDBTrigger(
             DatabaseName,
             CollectionName,
-            Connection = ConnectionString,
+            Connection = ConfigKeys.CosmosDBConnectionPrefix,
             LeaseContainerName = LeaseCollectionName,
             LeaseContainerPrefix = LeaseCollectionPrefix,
             CreateLeaseContainerIfNotExists  = true
