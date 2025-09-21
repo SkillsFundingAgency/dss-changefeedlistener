@@ -34,11 +34,11 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
             )]  IReadOnlyList<JsonDocument> documents)
         {
             var functionName = nameof(AddressChangeFeedTrigger);
-            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
+            _logger.LogTrace("Function {FunctionName} has been invoked", functionName);
 
             if (documents.Count > 0)
             {
-                _logger.LogInformation("Attempting to Send {Count} Documents from Address Cosomos DB to Service Bus", documents.Count);
+                _logger.LogTrace("Attempting to Send {Count} Documents from Address Cosomos DB to Service Bus", documents.Count);
                 foreach (var document in documents)
                 {
                     try
@@ -49,7 +49,7 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
                             IsAddress = true
                         };
                         var documentId = document.RootElement.GetProperty("id").ToString();
-                        _logger.LogInformation("Attempting to send document id: {DocumentID} to service bus queue", documentId);
+                        _logger.LogTrace("Attempting to send document id: {DocumentID} to service bus queue", documentId);
                         await _serviceBusClient.SendChangeFeedMessageAsync(documentId, changeFeedMessageModel);
                     }
                     catch (Exception ex)
@@ -57,13 +57,13 @@ namespace NCS.DSS.ChangeFeedListener.AddressChangeFeedTrigger
                         _logger.LogError(ex, "Error when trying to send message to service bus queue");
                     }
                 }
-                _logger.LogInformation("Successfully Sent {Count} Documents from Address Cosomos DB to Service Bus", documents.Count);
+                _logger.LogTrace("Successfully Sent {Count} Documents from Address Cosomos DB to Service Bus", documents.Count);
             }
             else
             {
                 _logger.LogInformation("No Documents found from Address Cosomos DB to Process");
             }
-            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
+            _logger.LogTrace("Function {FunctionName} has finished invoking", functionName);
         }
     }
 }
