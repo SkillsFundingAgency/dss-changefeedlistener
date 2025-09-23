@@ -32,7 +32,7 @@ namespace NCS.DSS.ChangeFeedListener.ServiceBus
         {
             try
             {
-                _logger.LogInformation("Attempting to Create Sender for Service Bus Queue {QueueName}", _queueName);
+                _logger.LogTrace("Attempting to Create Sender for Service Bus Queue {QueueName}", _queueName);
                 var serviceBusSender = _serviceBusClient.CreateSender(_queueName);
 
                 if (documentId == null)
@@ -49,15 +49,15 @@ namespace NCS.DSS.ChangeFeedListener.ServiceBus
                     throw ex;
                 }
 
-                _logger.LogInformation("Attempting to Create Service Bus Message for Document ID {DocumentID}", documentId);
+                _logger.LogTrace("Attempting to Create Service Bus Message for Document ID {DocumentID}", documentId);
                 var msg = new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(changeFeedMessageModel)))
                 {
                     ContentType = "application/json",
                     MessageId = documentId + " " + DateTime.UtcNow
                 };
-                _logger.LogInformation("Attempting to Send Service Bus Message for Document ID {DocumentID}", documentId);
+                _logger.LogTrace("Attempting to Send Service Bus Message for Document ID {DocumentID}", documentId);
                 await serviceBusSender.SendMessageAsync(msg);
-                _logger.LogInformation("Successfully Sent Service Bus Message for Document ID {DocumentID}", documentId);
+                _logger.LogTrace("Successfully Sent Service Bus Message for Document ID {DocumentID}", documentId);
 
             }
             catch (Exception ex)
